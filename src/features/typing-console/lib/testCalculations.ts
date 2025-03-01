@@ -1,4 +1,4 @@
-import { LogData } from "../store";
+import { LogData } from "../store/types";
 
 export const calcWordsPerMinute = (charsTyped: number, millis: number): number =>
     Math.floor(charsTyped / 5 / (millis / 60000));
@@ -26,7 +26,7 @@ export const calcAccuracyAndDeletions = (logs: LogData[]) => {
         }
     }
 
-    const finalAccuracy = Math.floor(((currentTypedWord.length - errorStatus.length) / currentTypedWord.length) * 100);
+    const finalAccuracy = Math.ceil(((currentTypedWord.length - deletedErrorCount) / currentTypedWord.length) * 100);
 
     return {
         finalAccuracy,
