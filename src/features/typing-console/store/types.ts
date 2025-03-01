@@ -7,7 +7,6 @@ export type LogData = {
 export type TestStatus = "IDLE" | "ACTIVE" | "FINISHED"
 
 export type TypingStoreState = {
-    initialText: string,
     enteredText: string,
     typeLogs: LogData[],
     errors: number,
@@ -15,7 +14,6 @@ export type TypingStoreState = {
     endTime: number | null,
     status: TestStatus,
     wpm: number,
-    currentWordIndex: number,
     accuracy: number
 }
 
@@ -23,10 +21,20 @@ export type TypingStoreActions = {
     setEnteredText: (text: string) => void,
     setTypeLogs: (log: LogData) => void,
     startTest: () => void,
-    endTest: () => void,
+    endTest: (initialText: string) => void,
     resetTest: () => void,
+}
+
+export type TypingStore = TypingStoreState & TypingStoreActions
+
+export type TextStoreState = {
+    initialText: string,
+    currentWordIndex: number,
+}
+
+export type TextStoreActions = {
     moveNextWord: () => void,
     getRemainingWords: () => string[],
 }
 
-export type TypingStore = TypingStoreState & TypingStoreActions
+export type TextStore = TextStoreState & TextStoreActions

@@ -4,14 +4,15 @@ import { TypingInput } from "./features/typing-console/components/TypingConsoleI
 import { useTypingStore } from "./features/typing-console/store/store";
 import { TypingConsoleTitle } from "./features/typing-console/components/TypingConsoleTitle";
 import { TypingConsole } from "./features/typing-console/components/TypingConsole";
+import { useTextStore } from "./features/typing-console/store/textStore";
 
 const App: React.FC = () => {
   const onRestartTest = useTypingStore.use.resetTest();
   const enteredText = useTypingStore.use.enteredText();
   const endTest = useTypingStore.use.endTest();
-  const wordsPerMinute = useTypingStore.use.wpm();
-  const getRemainingWords = useTypingStore.use.getRemainingWords();
-  const currentWordIndex = useTypingStore.use.currentWordIndex();
+  const getRemainingWords = useTextStore.use.getRemainingWords();
+  const initialText = useTextStore.use.initialText();
+  const currentWordIndex = useTextStore.use.currentWordIndex();
   const words = useMemo(
     () => getRemainingWords(),
     [getRemainingWords, currentWordIndex]
@@ -19,7 +20,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (words.length === 0) {
-      endTest();
+      endTest(initialText);
     }
   }, [words.length, endTest]);
 

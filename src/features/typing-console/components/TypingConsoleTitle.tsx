@@ -1,10 +1,11 @@
 import { useTypingStore } from "../store/store";
+import { useTextStore } from "../store/textStore";
 
 export const TypingConsoleTitle: React.FC = () => {
   const status = useTypingStore.use.status();
   const accuracy = useTypingStore.use.accuracy();
   const wordsPerMinute = useTypingStore.use.wpm();
-  const currentWordIndex = useTypingStore.use.currentWordIndex();
+  const currentWordIndex = useTextStore.use.currentWordIndex();
   const correctWordsCount = currentWordIndex;
 
   return (

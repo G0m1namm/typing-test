@@ -5,7 +5,6 @@ import { createSelectors } from "../../../utils/createSelectors"
 import { TypingStore, TypingStoreState } from "./types"
 
 const initialState: TypingStoreState = {
-    initialText: 'This is the sentence to type',
     enteredText: '',
     typeLogs: [],
     errors: 0,
@@ -13,7 +12,6 @@ const initialState: TypingStoreState = {
     endTime: null,
     status: "IDLE",
     wpm: 0,
-    currentWordIndex: 0,
     accuracy: 0,
 }
 
@@ -32,9 +30,9 @@ const useTypingStoreBase = create<TypingStore>()(
             set({ typeLogs: [...typeLogs, newLog] })
         },
         startTest: () => set({ startTime: Date.now(), endTime: null }),
-        endTest: () => {
+        endTest: (initialText) => {
             const endTime = Date.now();
-            const { initialText, startTime, typeLogs } = get()
+            const { startTime, typeLogs } = get()
 
             if (startTime) {
                 const calculatedWPM = calcWordsPerMinute(initialText.length, endTime - startTime)
@@ -50,15 +48,7 @@ const useTypingStoreBase = create<TypingStore>()(
                 errors: deletedErrorCount
             })
         },
-        resetTest: () => set(initialState),
-        moveNextWord: () => {
-            set(state => ({ currentWordIndex: state.currentWordIndex + 1 }))
-        },
-        getRemainingWords: () => {
-            const { initialText, currentWordIndex } = get()
-            const words = initialText.trim().split(' ')
-            return words.slice(currentWordIndex)
-        }
+        resetTest: () => set(initialState)
     })))
 
 export const useTypingStore = createSelectors(useTypingStoreBase)

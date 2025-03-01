@@ -1,13 +1,14 @@
 import { ChangeEvent, KeyboardEvent, useMemo } from "react";
 import { useTypingStore } from "../store/store";
+import { useTextStore } from "../store/textStore";
 
 export const TypingInput = () => {
   const setEnteredText = useTypingStore.use.setEnteredText();
   const enteredText = useTypingStore.use.enteredText();
   const status = useTypingStore.use.status();
-  const getRemainingWords = useTypingStore.use.getRemainingWords();
-  const moveNextWord = useTypingStore.use.moveNextWord();
-  const currentWordIndex = useTypingStore.use.currentWordIndex();
+  const getRemainingWords = useTextStore.use.getRemainingWords();
+  const moveNextWord = useTextStore.use.moveNextWord();
+  const currentWordIndex = useTextStore.use.currentWordIndex();
   const logger = useTypingStore.use.setTypeLogs();
   const remainingWords = useMemo(
     () => getRemainingWords(),
