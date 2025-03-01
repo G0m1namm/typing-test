@@ -9,12 +9,13 @@ export type TestStatus = "IDLE" | "ACTIVE" | "FINISHED"
 export type TypingStoreState = {
     enteredText: string,
     typeLogs: LogData[],
-    errors: number,
+    deletedErrors: number,
     startTime: number | null,
     endTime: number | null,
     status: TestStatus,
     wpm: number,
-    accuracy: number
+    accuracy: number,
+    score: number
 }
 
 export type TypingStoreActions = {
