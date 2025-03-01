@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "json-server": "json-server --watch db.json",
+    "json-server": "json-server --watch db.json --port 3030",
     "build": "react-scripts build",
     "test": "jest",
     "eject": "react-scripts eject"
