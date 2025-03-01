@@ -9,6 +9,7 @@ const App: React.FC = () => {
   const [started, setStarted] = useState(false);
   const [startTime, setStartTime] = useState(new Date());
   const [wordsPerMinute, setWordsPerMinute] = useState(0);
+  const [hasFinished, setHasFinished] = useState<boolean>(false);
 
   const checkFinished = () => {
     if (!words.length) {
@@ -16,9 +17,10 @@ const App: React.FC = () => {
         const timeMillis: number = new Date().getTime() - startTime.getTime();
         const wpm = calcWordsPerMinute(typeTest.length, timeMillis);
         setWordsPerMinute(wpm);
+        setHasFinished(true);
       }
     }
-  }
+  };
 
   useEffect(() => {
     if (words.length !== 0) return;
@@ -62,7 +64,9 @@ const App: React.FC = () => {
           )
         )}
       </h6>
-      <input name="text" value={enteredText} onChange={onWordChange} />
+      {!hasFinished && (
+        <input name="text" value={enteredText} onChange={onWordChange} />
+      )}
     </div>
   );
 };
