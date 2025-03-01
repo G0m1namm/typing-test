@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import "./App.css";
 import { TypingInput } from "./features/typing-console/components/TypingConsoleInput";
-import { useTypingStore } from "./features/typing-console/store/store";
+import { useTypingStore } from "./features/typing-console/store/typingTestStore";
 import { TypingConsoleTitle } from "./features/typing-console/components/TypingConsoleTitle";
 import { TypingConsole } from "./features/typing-console/components/TypingConsole";
 import { useTextStore } from "./features/typing-console/store/textStore";

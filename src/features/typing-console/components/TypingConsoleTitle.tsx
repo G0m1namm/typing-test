@@ -1,4 +1,4 @@
-import { useTypingStore } from "../store/store";
+import { useTypingStore } from "../store/typingTestStore";
 import { useTextStore } from "../store/textStore";
 
 export const TypingConsoleTitle: React.FC = () => {
