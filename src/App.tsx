@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import "./App.css";
+import { TypedWord } from "./components/TypedWord";
 
 const App: React.FC = () => {
   const [typeTest] = useState("This is the sentence to type");
@@ -64,9 +65,11 @@ const App: React.FC = () => {
       <h6>
         {words.map((word, index) =>
           word === words[0] ? (
-            <em className="current-word" key={index}>
-              {word}{" "}
-            </em>
+            <TypedWord
+              word={word}
+              inputText={enteredText}
+              key={`${word}-${index}`}
+            />
           ) : (
             word + " "
           )
