@@ -3,7 +3,7 @@ import { LogData } from "../store/types";
 export const calcWordsPerMinute = (charsTyped: number, millis: number): number =>
     Math.floor(charsTyped / 5 / (millis / 60000));
 
-export const calcAccuracyAndDeletions = (logs: LogData[]) => {
+export const calcAccuracyAndDeletions = (initialText: string, logs: LogData[]) => {
     let currentTypedWord = "";
     let deletedErrorCount = 0;
     let errorStatus = [];
@@ -26,7 +26,7 @@ export const calcAccuracyAndDeletions = (logs: LogData[]) => {
         }
     }
 
-    const finalAccuracy = Math.ceil(((currentTypedWord.length - deletedErrorCount) / currentTypedWord.length) * 100);
+    const finalAccuracy = ((currentTypedWord.length) / initialText.length) * 100;
 
     return {
         finalAccuracy,
