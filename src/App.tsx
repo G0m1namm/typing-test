@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo } from "react";
 import "./App.css";
-import { TypedWord } from "./components/TypedWord";
-import { TypingInput } from "./features/typing-console/components/TypingInput";
-import { useTypingStore } from "./features/typing-console/store";
+import { TypingInput } from "./features/typing-console/components/TypingConsoleInput";
+import { useTypingStore } from "./features/typing-console/store/store";
+import { TypingConsoleTitle } from "./features/typing-console/components/TypingConsoleTitle";
+import { TypingConsole } from "./features/typing-console/components/TypingConsole";
 
 const App: React.FC = () => {
   const onRestartTest = useTypingStore.use.resetTest();
   const enteredText = useTypingStore.use.enteredText();
   const endTest = useTypingStore.use.endTest();
   const wordsPerMinute = useTypingStore.use.wpm();
-  const accuracy = useTypingStore.use.accuracy();
   const getRemainingWords = useTypingStore.use.getRemainingWords();
   const currentWordIndex = useTypingStore.use.currentWordIndex();
   const words = useMemo(
@@ -25,23 +25,8 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <h1>
-        {wordsPerMinute
-          ? `You typed ${0} words at ${wordsPerMinute} WPM. Accuracy: ${accuracy}%`
-          : "Test Your Typing Speed, Scrub!"}
-      </h1>
-      <h3>
-        {wordsPerMinute ? `Refresh to retake the test!` : `Type the following:`}
-      </h3>
-      <h6>
-        {words.map((word) =>
-          word === words[0] ? (
-            <TypedWord word={word} inputText={enteredText} key={`${word}`} />
-          ) : (
-            word + " "
-          )
-        )}
-      </h6>
+      <TypingConsoleTitle />
+      <TypingConsole words={words} enteredText={enteredText} />
       <div>
         <button onClick={onRestartTest}>Restart</button>
       </div>
