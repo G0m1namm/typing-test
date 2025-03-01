@@ -4,11 +4,11 @@ import "./App.css";
 const App: React.FC = () => {
   const [typeTest] = useState("This is the sentence to type");
   const [words, setWords] = useState(typeTest.split(" "));
-  const [enteredText, setEnteredText] = useState("");
-  const [correctCount, setCorrectCount] = useState(0);
-  const [started, setStarted] = useState(false);
-  const [startTime, setStartTime] = useState(new Date());
-  const [wordsPerMinute, setWordsPerMinute] = useState(0);
+  const [enteredText, setEnteredText] = useState<string>("");
+  const [correctCount, setCorrectCount] = useState<number>(0);
+  const [started, setStarted] = useState<boolean>(false);
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [wordsPerMinute, setWordsPerMinute] = useState<number>(0);
   const [hasFinished, setHasFinished] = useState<boolean>(false);
 
   const checkFinished = () => {
@@ -43,6 +43,14 @@ const App: React.FC = () => {
     }
   };
 
+  const onRestartTest = () => {
+    setWords(typeTest.split(" "));
+    setStarted(false);
+    setCorrectCount(0);
+    setWordsPerMinute(0);
+    setHasFinished(false);
+  };
+
   return (
     <div className="App">
       <h1>
@@ -64,6 +72,9 @@ const App: React.FC = () => {
           )
         )}
       </h6>
+      <div>
+        <button onClick={onRestartTest}>Restart</button>
+      </div>
       {!hasFinished && (
         <input name="text" value={enteredText} onChange={onWordChange} />
       )}
