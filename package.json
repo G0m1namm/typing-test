@@ -30,9 +30,7 @@
     "json-server": "json-server --watch db.json --port 3030",
     "build": "react-scripts build",
     "test": "jest --coverage",
-    "eject": "react-scripts eject",
-    "lint": "biome lint --write ./",
-    "format": "biome format --write ./"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -53,7 +51,6 @@
     ]
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "jest": "^29.3.1",
