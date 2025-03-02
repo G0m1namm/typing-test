@@ -13,7 +13,6 @@ describe('Test Calculation Helpers', () => {
     });
 
     it("Test calcAccuracyAndDeletions", () => {
-        const initialText = "do it";
         const logs: LogData[] = [
             { action: "typing", character: "d", word: "do" },
             { action: "typing", character: "o", word: "do" },
