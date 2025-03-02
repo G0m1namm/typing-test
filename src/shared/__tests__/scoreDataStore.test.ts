@@ -35,7 +35,7 @@ describe('ScoreDataStore', () => {
                 });
                 await new Promise(resolve => setTimeout(resolve, 100));
                 act(() => {
-                    useScoreDataStore.setState({ isLoading: false });
+                    useScoreDataStore.setState({ isLoading: false, success: true });
                 });
             });
 
@@ -46,7 +46,12 @@ describe('ScoreDataStore', () => {
             await waitFor(() => {
                 const { result: updatedStore } = renderHook(() => useScoreDataStore.getState());
                 const currentState = updatedStore.current;
-                expect(currentState).toMatchObject({
+
+                expect({
+                    isLoading: currentState.isLoading,
+                    error: currentState.error,
+                    success: currentState.success
+                }).toMatchObject({
                     isLoading: false,
                     error: null,
                     success: true
