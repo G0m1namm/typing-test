@@ -2,7 +2,7 @@ import { useTypingStore } from "../store/typingTestStore";
 import { useTextStore } from "../store/textStore";
 import { useState } from "react";
 import { useScoreDataStore } from "../../../shared/store/scoreDataStore";
-import { ScoreEntry } from "../../../shared/store/types";
+import type { ScoreEntry } from "../../../shared/store/types";
 
 export const TypingConsoleTitle: React.FC = () => {
   const status = useTypingStore.use.status();
@@ -45,13 +45,15 @@ export const TypingConsoleTitle: React.FC = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <button onClick={onSaveScoreHandler}>Save</button>
+          <button type="button" onClick={onSaveScoreHandler}>
+            Save
+          </button>
         </div>
       )}
       <h3>
         {status === "FINISHED"
-          ? `Refresh to retake the test!`
-          : `Type the following:`}
+          ? "Refresh to retake the test!"
+          : "Type the following:"}
       </h3>
     </>
   );

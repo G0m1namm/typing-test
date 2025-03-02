@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo } from "react";
+import type React from "react";
+import { useEffect, useMemo } from "react";
 import "./App.css";
 import { TypingInput } from "./features/typing-console/components/TypingConsoleInput";
 import { useTypingStore } from "./features/typing-console/store/typingTestStore";
@@ -23,14 +24,16 @@ const App: React.FC = () => {
     if (words.length === 0) {
       endTest(initialText);
     }
-  }, [words.length, endTest]);
+  }, [words.length, endTest, initialText]);
 
   return (
     <div className="App">
       <TypingConsoleTitle />
       <TypingConsole words={words} enteredText={enteredText} />
       <div>
-        <button onClick={onRestartTest}>Restart</button>
+        <button type="button" onClick={onRestartTest}>
+          Restart
+        </button>
       </div>
       <TypingInput />
 

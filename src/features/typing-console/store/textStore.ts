@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { createSelectors } from "../../../utils/createSelectors"
-import { TextStore } from "./types"
+import type { TextStore } from "./types"
 
 const initialState = {
     initialText: 'This is the sentence to type',

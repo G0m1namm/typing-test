@@ -1,4 +1,4 @@
-import { ScoreEntry } from "../../../shared/store/types"
+import type { ScoreEntry } from "../../../shared/store/types"
 
 export type LeaderboardStoreState = {
     isLoading: boolean,

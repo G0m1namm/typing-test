@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEvent, useCallback, useMemo } from "react";
+import { type ChangeEvent, type KeyboardEvent, useCallback, useMemo } from "react";
 import { useTypingStore } from "../store/typingTestStore";
 import { useTextStore } from "../store/textStore";
 import { TypingConsoleTimer } from "./TypingConsoleTimer";

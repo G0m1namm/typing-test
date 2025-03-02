@@ -1,4 +1,4 @@
-import { LogData } from "../store/types";
+import type { LogData } from "../store/types";
 
 export const calcWordsPerMinute = (charsTyped: number, millis: number): number =>
     Math.floor(charsTyped / 5 / (millis / 60000));
@@ -6,7 +6,7 @@ export const calcWordsPerMinute = (charsTyped: number, millis: number): number =
 export const calcAccuracyAndDeletions = (initialText: string, logs: LogData[]) => {
     let currentTypedWord = "";
     let deletedErrorCount = 0;
-    let errorStatus = [];
+    const errorStatus = [];
 
     for (const log of logs) {
         if (log.action === "typing") {

@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { createSelectors } from "../../utils/createSelectors"
-import { ScoreDataStore, ScoreDataStoreState } from "./types"
+import type { ScoreDataStore, ScoreDataStoreState } from "./types"
 import { createScore } from "../api/createScore"
 
 

@@ -15,11 +15,17 @@ export const Leaderboard: React.FC = () => {
     if(error) return <div>Error: {error}</div>
 
     return (
-        <>
-            {!Boolean(leaderboard?.length) && <div>Empty Results</div>}
-            <ul>
-                {leaderboard.map(score => <li key={score.id}><strong>ID: {score.id} - </strong>{score.username}<strong> - {score.score}</strong></li>)}
-            </ul>
-        </>
-    )
+      <>
+        {Boolean(leaderboard?.length) === false && <div>Empty Results</div>}
+        <ul>
+          {leaderboard.map((score) => (
+            <li key={score.id}>
+              <strong>ID: {score.id} - </strong>
+              {score.username}
+              <strong> - {score.score}</strong>
+            </li>
+          ))}
+        </ul>
+      </>
+    );
 }

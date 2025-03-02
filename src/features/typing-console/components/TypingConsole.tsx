@@ -1,5 +1,5 @@
 import { TypedWord } from "./TypedWord";
-import { TypingStoreState } from "../store/types";
+import type { TypingStoreState } from "../store/types";
 
 type TypingConsoleProps = {
   words: string[];
@@ -13,9 +13,13 @@ export const TypingConsole: React.FC<TypingConsoleProps> = ({
     <h6>
       {words.map((word) =>
         word === words[0] ? (
-          <TypedWord word={word} inputText={enteredText} key={`${word}`} />
+          <TypedWord
+            word={word}
+            inputText={enteredText}
+            key={`${word}-${word.length}`}
+          />
         ) : (
-          word + " "
+          `${word} `
         )
       )}
     </h6>

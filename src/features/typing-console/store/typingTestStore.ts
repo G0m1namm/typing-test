@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { subscribeWithSelector } from 'zustand/middleware'
 import calculateScore, { calcAccuracyAndDeletions, calcWordsPerMinute } from "../lib/testCalculations"
 import { createSelectors } from "../../../utils/createSelectors"
-import { TypingStore, TypingStoreState } from "./types"
+import type { TypingStore, TypingStoreState } from "./types"
 
 const initialState: TypingStoreState = {
     enteredText: '',

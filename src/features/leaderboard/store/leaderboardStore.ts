@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { LeaderboardStore, LeaderboardStoreState } from "./types"
+import type { LeaderboardStore, LeaderboardStoreState } from "./types"
 import { getLeaderboard } from "../api/getLeaderboard"
 import { createSelectors } from "../../../utils/createSelectors"
 
