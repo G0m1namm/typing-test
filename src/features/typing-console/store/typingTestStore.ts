@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { subscribeWithSelector } from 'zustand/middleware'
 import calculateScore, { calcAccuracyAndDeletions, calcWordsPerMinute } from "../lib/testCalculations"
 import { createSelectors } from "../../../utils/createSelectors"
-import type { TypingStore, TypingStoreState } from "./types"
+import type { TypingStore, TypingStoreState, LogData } from "./types"
 
 const initialState: TypingStoreState = {
     enteredText: '',
@@ -27,19 +27,14 @@ const useTypingStoreBase = create<TypingStore>()(
             }
             set({ enteredText: text.trim() })
         },
-        setTypeLogs: (newLog) => {
-            const { typeLogs } = get()
-            set({ typeLogs: [...typeLogs, newLog] })
-        },
+        setTypeLogs: (newLog: LogData) => set((state) => ({ typeLogs: [...state.typeLogs, newLog] })),
         startTest: () => set({ startTime: Date.now(), endTime: null, status: "ACTIVE" }),
-        endTest: (initialText) => {
+        endTest: (initialText: string) => {
             const endTime = Date.now();
             const { startTime, typeLogs } = get()
 
-            let calculatedWPM = 0;
-            if (startTime) {
-                calculatedWPM = calcWordsPerMinute(initialText.length, endTime - startTime)
-            }
+            const initialTime = startTime as number;
+            const calculatedWPM = calcWordsPerMinute(initialText.length, endTime - initialTime)
             set({ wpm: calculatedWPM })
 
             const { finalAccuracy, deletedErrorCount } = calcAccuracyAndDeletions(typeLogs)

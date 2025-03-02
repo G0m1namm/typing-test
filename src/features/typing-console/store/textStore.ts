@@ -17,7 +17,7 @@ const useTextStoreBase = create<TextStore>()((set, get) => ({
         const words = initialText.trim().split(' ')
         return words.slice(currentWordIndex)
     },
-    resetStore: () => set(initialState)
+    resetStore: () => set({ currentWordIndex: 0 })
 }))
 
 export const useTextStore = createSelectors(useTextStoreBase)

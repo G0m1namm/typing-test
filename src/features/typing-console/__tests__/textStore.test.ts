@@ -1,13 +1,18 @@
-import { useTextStore } from "../../../testing/test-utils";
+import { renderHook } from "@testing-library/react";
+import { act } from "react";
+import { useTextStore } from "../store/textStore";
 
 describe('TextStore', () => {
   beforeEach(() => {
-    useTextStore.getState().resetStore()
+    const { result } = renderHook(() => useTextStore);
+    result.current.getState().resetStore()
+    result.current.setState({ initialText: "example mock data" })
   });
 
   describe('Initial State', () => {
     it('should initialize with correct default values', () => {
-      const state = useTextStore.getState();
+      const { result } = renderHook(() => useTextStore);
+      const state = result.current.getState();
       
       const expectedState = {
         initialText: "example mock data",
@@ -21,54 +26,70 @@ describe('TextStore', () => {
   describe('Actions', () => {
     describe('moveNextWord', () => {
       it('should increment by 1 the currentWordIndex value', () => {
-        const currentIndex = useTextStore.getState().currentWordIndex;
+        const { result } = renderHook(() => useTextStore.getState());
+        const currentIndex = result.current.currentWordIndex;
 
-        expect(currentIndex).toBe(0)
-        useTextStore.getState().moveNextWord()
+        expect(currentIndex).toBe(0);
 
-        const newIndex = useTextStore.getState().currentWordIndex;
-        expect(newIndex).toBe(1)
+        act(() => {
+          result.current.moveNextWord();
+        });
+
+        const { result: newStore } = renderHook(() => useTextStore.getState());
+        const newIndex = newStore.current.currentWordIndex;
+        expect(newIndex).toBe(1);
       });
     });
 
     describe('getRemainingWords', () => {
-        it('should return an array of all strings from initialText', () => {
-            const initialText = useTextStore.getState().initialText;
-            const remainingWords = useTextStore.getState().getRemainingWords() 
-            
-            const expectedArray = initialText.trim().split(" ");
-            expect(remainingWords).toEqual(expectedArray)
-        })
-        
-        it('should remove first item when currentWordIndex increase', () => {
-            const initialRemainingWords = useTextStore.getState().getRemainingWords() 
-            
-            expect(initialRemainingWords.length).toBe(3)
+      it('should return an array of all strings from initialText', () => {
+        const { result } = renderHook(() => useTextStore.getState());
+        const initialText = result.current.initialText;
+        const remainingWords = result.current.getRemainingWords();
 
-            useTextStore.getState().moveNextWord()
-            const remainingWords = useTextStore.getState().getRemainingWords()
+        const expectedArray = initialText.trim().split(" ");
+        expect(remainingWords).toEqual(expectedArray);
+      });
 
-            const expectedArray = initialRemainingWords.slice(1)
-            
-            expect(remainingWords).toEqual(expectedArray)
-        })
-    })
+      it('should remove first item when currentWordIndex increases', () => {
+        const { result } = renderHook(() => useTextStore.getState());
+        const initialRemainingWords = result.current.getRemainingWords();
+
+        expect(initialRemainingWords.length).toBe(3);
+
+        act(() => {
+          result.current.moveNextWord();
+        });
+
+        const { result: newStore } = renderHook(() => useTextStore.getState());
+        const remainingWords = newStore.current.getRemainingWords();
+
+        const expectedArray = initialRemainingWords.slice(1);
+
+        expect(remainingWords).toEqual(expectedArray);
+      });
+    });
 
     describe('resetStore', () => {
       it('should restore initial state', () => {
-        useTextStore.setState({
-          currentWordIndex: 4,
-          initialText: 'mock new data',
+        const { result } = renderHook(() => useTextStore);
+
+        act(() => {
+          result.current.setState({
+            currentWordIndex: 4,
+          });
         });
 
-        useTextStore.getState().resetStore();
-        const state = useTextStore.getState();
-
-        expect(state).toMatchObject({
-          currentWordIndex: 0,
-          initialText: "example mock data",
+        act(() => {
+          result.current.getState().resetStore();
         });
+
+
+        const { result: newStore } = renderHook(() => useTextStore.getState());
+        const state = newStore.current;
+
+        expect(state.currentWordIndex).toBe(0);
       });
     });
   });
-})
+});

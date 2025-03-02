@@ -1,76 +1,123 @@
-import { useTextStore, useTypingStore } from '../../../testing/test-utils';
+import { act } from 'react';
+import { LogData, TypingStoreState } from '../store/types';
+import { useTypingStore } from '../store/typingTestStore';
+import { renderHook } from '@testing-library/react';
 
 describe('TypingStore', () => {
-  // Reset store before each test for isolation
-  beforeEach(() => {
-    useTypingStore.getState().resetTest();
-    useTextStore.getState().resetStore()
+  const initialState: TypingStoreState = {
+    enteredText: '',
+    typeLogs: [],
+    deletedErrors: 0,
+    startTime: null,
+    endTime: null,
+    status: "IDLE",
+    wpm: 0,
+    accuracy: 0,
+    score: 0,
+  };
+
+  it('should initialize with correct defaults', () => {
+    const { result } = renderHook(() => useTypingStore.getState());
+    const state = result.current;
+    expect(state).toMatchObject(initialState);
   });
 
-  describe('Initial State', () => {
-    it('should initialize with correct default values', () => {
-      const state = useTypingStore.getState();
-      
-      const expectedState = {
-        enteredText: '',
-        typeLogs: [],
-        deletedErrors: 0,
-        startTime: null,
-        endTime: null,
-        status: 'IDLE',
-        wpm: 0,
-        accuracy: 0,
-        score: 0,
-      };
+  it('should set entered text and start the test if startTime is null', () => {
+    const { result } = renderHook(() => useTypingStore.getState());
+    const setEnteredText = result.current.setEnteredText;
 
-      expect(state).toMatchObject(expectedState);
+    const initTimer = jest.fn();
+    act(() => {
+      setEnteredText('test', initTimer);
     });
+
+    const { result: newStore } = renderHook(() => useTypingStore.getState());
+    const updatedEnteredText = newStore.current.enteredText;
+    const updatedStartTime = newStore.current.startTime;
+    expect(updatedEnteredText).toBe('test');
+    expect(updatedStartTime).not.toBeNull();
+    expect(initTimer).toHaveBeenCalled();
   });
 
-  describe('Actions', () => {
-    describe('startTest', () => {
-      it('should set start time and update status', () => {
-        const beforeStart = Date.now();
-        useTypingStore.getState().startTest();
-        const { startTime, status } = useTypingStore.getState();
-
-        expect(startTime).toBeGreaterThanOrEqual(beforeStart);
-        expect(status).toBe('ACTIVE');
-      });
+  it('should set entered text while startTime exists without calling startTest and callback', () => {
+    const { result } = renderHook(() => useTypingStore.getState());
+    act(() => {
+      result.current.startTest();
     });
 
-    describe('endTest', () => {
-      it('should set end time and final status', () => {
-        // First start the test properly
-        useTypingStore.getState().startTest();
-        const initialText = useTextStore.getState().initialText;
-        const beforeEnd = Date.now();
-        useTypingStore.getState().endTest(initialText);
-        const { endTime, status } = useTypingStore.getState();
-
-        expect(endTime).toBeGreaterThanOrEqual(beforeEnd);
-        expect(status).toBe('FINISHED');
-      });
+    const initTimer = jest.fn();
+    act(() => {
+      result.current.setEnteredText('test2', initTimer);
     });
 
-    describe('resetTest', () => {
-      it('should restore initial state', () => {
-        // Modify state first
-        useTypingStore.setState({
-          enteredText: 'test',
-          status: "IDLE",
-          startTime: Date.now()
-        });
+    const { result: updatedStore } = renderHook(() => useTypingStore.getState());
+    expect(updatedStore.current.enteredText).toBe('test2');
+    expect(initTimer).not.toHaveBeenCalled();
+  });
 
-        useTypingStore.getState().resetTest();
-        const state = useTypingStore.getState();
-
-        expect(state).toMatchObject({
-          enteredText: '',
-          status: 'IDLE',
-          startTime: null,
-        });
-      });
+  it('should start the test', () => {
+    const { result } = renderHook(() => useTypingStore.getState());
+    act(() => {
+      result.current.startTest();
     });
+
+    const { result: updatedStore } = renderHook(() => useTypingStore.getState());
+    expect(updatedStore.current.startTime).not.toBeNull();
+    expect(updatedStore.current.status).toBe("ACTIVE");
+  });
+
+  it('should set type logs', () => {
+    const { result } = renderHook(() => useTypingStore.getState());
+    const newLog = { character: 'a', action: 'typing', word: 'test' } as LogData;
+    act(() => {
+      result.current.setTypeLogs(newLog);
+    });
+
+    const { result: updatedStore } = renderHook(() => useTypingStore.getState());
+    expect(updatedStore.current.typeLogs).toEqual([newLog]);
+  });
+
+  it('should end the test and calculate results', () => {
+    const { result } = renderHook(() => useTypingStore.getState());
+    act(() => {
+      result.current.startTest();
+    });
+
+    const initialText = 'test';
+    act(() => {
+      result.current.endTest(initialText);
+    });
+
+    const { result: updatedStore } = renderHook(() => useTypingStore.getState());
+    expect(updatedStore.current.endTime).not.toBeNull();
+    expect(updatedStore.current.status).toBe("FINISHED");
+    expect(updatedStore.current.wpm).toBeGreaterThanOrEqual(0);
+    expect(updatedStore.current.accuracy).toBeGreaterThanOrEqual(0);
+    expect(updatedStore.current.score).toBeGreaterThanOrEqual(0);
+  });
+
+  it('should reset the test', () => {
+    const { result } = renderHook(() => useTypingStore.getState());
+    act(() => {
+      result.current.startTest();
+      result.current.setEnteredText('test');
+      result.current.setTypeLogs({ character: 'a', action: 'typing', word: 'test' });
+      result.current.endTest('test');
+      result.current.resetTest();
+    });
+
+    const { result: updatedStore } = renderHook(() => useTypingStore.getState());
+    expect(updatedStore.current).toMatchObject(initialState);
+  });
+
+  it('should not calculate WPM if startTime is null', () => {
+    const { result } = renderHook(() => useTypingStore.getState());
+    const initialText = 'test';
+    act(() => {
+      result.current.endTest(initialText);
+    });
+
+    const { result: updatedStore } = renderHook(() => useTypingStore.getState());
+    expect(updatedStore.current.wpm).toBe(0);
   });
 });

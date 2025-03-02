@@ -1,7 +1,4 @@
-import { StateCreator } from 'zustand';
-import type { ScoreDataStore, ScoreEntry } from '../shared/store/types';
-import type { TextStore, TypingStore } from '../features/typing-console/store/types';
-import type { LeaderboardStore } from '../features/leaderboard/store/types';
+import type { ScoreEntry } from '../shared/store/types';
 
 // Mock single score entry for savesScore in ScoreDataStore
 export const createMockScoreEntry = (): ScoreEntry => ({
@@ -16,67 +13,3 @@ export const createMockScoreEntry = (): ScoreEntry => ({
 export const createMockScoreEntries = (count: number): ScoreEntry[] => {
   return Array.from({ length: count }, () => ({ ...createMockScoreEntry(), id: 2 }));
 };
-
-// Mock data generator for TypingStore
-export const createMockTypingStore: StateCreator<TypingStore> = (set) => ({
-  enteredText: '',
-  typeLogs: [],
-  deletedErrors: 0,
-  startTime: null,
-  endTime: null,
-  status: "IDLE",
-  wpm: 0,
-  accuracy: 0,
-  score: 0,
-  setEnteredText: (text) => set({ enteredText: text }),
-  setTypeLogs: (newLog) => set((state) => ({ typeLogs: [...state.typeLogs, newLog] })),
-  startTest: () => set({ startTime: Date.now(), endTime: null, status: "ACTIVE" }),
-  endTest: () => set({ endTime: Date.now(), status: "FINISHED" }),
-  resetTest: () => set({
-    enteredText: '',
-    typeLogs: [],
-    deletedErrors: 0,
-    startTime: null,
-    endTime: null,
-    status: "IDLE",
-    wpm: 0,
-    accuracy: 0,
-    score: 0,
-  }),
-});
-
-// Mock data generator for ScoreDataStore
-export const createMockScoreDataStore: StateCreator<ScoreDataStore> = (set) => ({
-  isLoading: false,
-  error: null,
-  savesScore: async () => {
-    set({ isLoading: true });
-    await new Promise((resolve) => setTimeout(resolve, 100))
-    set({ isLoading: false });
-  },
-});
-
-// Mock data generator for TextStore
-export const createMockTextStore: StateCreator<TextStore> = (set, get) => ({
-  initialText: 'example mock data',
-  currentWordIndex: 0,
-  moveNextWord: () => set((state) => ({ currentWordIndex: state.currentWordIndex + 1 })),
-  getRemainingWords: () => {
-    const { currentWordIndex, initialText } = get()
-    const words = initialText.trim().split(" ")
-    return words.slice(currentWordIndex)
-  },
-  resetStore: () => set({initialText: 'example mock data', currentWordIndex: 0, })
-});
-
-// Mock data generator for LeaderboardStore
-export const createMockLeaderboardStore: StateCreator<LeaderboardStore> = (set) => ({
-  isLoading: false,
-  error: null,
-  leaderboard: [],
-  fetchLeaderboard: async () => {
-    set({ isLoading: true });
-    await new Promise(resolve => setTimeout(resolve, 100));
-    set({ isLoading: false, leaderboard: createMockScoreEntries(2) });
-  },
-});
