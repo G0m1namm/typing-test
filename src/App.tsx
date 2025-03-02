@@ -1,47 +1,59 @@
 import type React from "react";
-import { useEffect, useMemo } from "react";
-import "./App.css";
-import { TypingInput } from "./features/typing-console/components/TypingConsoleInput";
-import { useTypingStore } from "./features/typing-console/store/typingTestStore";
-import { TypingConsoleTitle } from "./features/typing-console/components/TypingConsoleTitle";
-import { TypingConsole } from "./features/typing-console/components/TypingConsole";
-import { useTextStore } from "./features/typing-console/store/textStore";
 import { Leaderboard } from "./features/leaderboard/components/Leaderboard";
+import { TestPanel } from "./features/typing-console/components/TestPanel";
+import {
+  Box,
+  Center,
+  Container,
+  Flex,
+  Heading,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
+import "./App.css";
 
 const App: React.FC = () => {
-  const onRestartTest = useTypingStore.use.resetTest();
-  const enteredText = useTypingStore.use.enteredText();
-  const endTest = useTypingStore.use.endTest();
-  const getRemainingWords = useTextStore.use.getRemainingWords();
-  const initialText = useTextStore.use.initialText();
-  const currentWordIndex = useTextStore.use.currentWordIndex();
-  const words = useMemo(
-    () => getRemainingWords(),
-    [getRemainingWords, currentWordIndex]
-  );
-
-  useEffect(() => {
-    if (words.length === 0) {
-      endTest(initialText);
-    }
-  }, [words.length, endTest, initialText]);
-
   return (
-    <div className="App">
-      <TypingConsoleTitle />
-      <TypingConsole words={words} enteredText={enteredText} />
-      <div>
-        <button type="button" onClick={onRestartTest}>
-          Restart
-        </button>
-      </div>
-      <TypingInput />
-
-      <div>
-        <h2>Leaderboard</h2>
-        <Leaderboard />
-      </div>
-    </div>
+    <Container
+      maxW="container.xl"
+      className="App"
+      justifyContent="center"
+      alignItems="flex-start"
+    >
+      <Flex
+        flexDirection="column"
+        justifyContent="flex-start"
+        alignItems="center"
+        w="80%"
+        h="full"
+        minH="70vh"
+        marginInline="auto"
+        my="20"
+      >
+        <Box mb="10">
+          <Center>
+            <Heading>Typing Speed Test</Heading>
+          </Center>
+        </Box>
+        <Tabs isFitted w="full">
+          <TabList mb="1em">
+            <Tab>Typing Zone</Tab>
+            <Tab>Leaderboard</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <TestPanel />
+            </TabPanel>
+            <TabPanel>
+              <Leaderboard />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Flex>
+    </Container>
   );
 };
 

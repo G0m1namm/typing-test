@@ -25,7 +25,7 @@ export const TypedWord = ({
         return (
           <span
             className={inputText.charAt(index) && charClass}
-            key={`${word}-${char}`}
+            key={`${char}-${index}`}
           >
             {char}
           </span>

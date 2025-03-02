@@ -3,6 +3,7 @@ import { useTextStore } from "../store/textStore";
 import { useState } from "react";
 import { useScoreDataStore } from "../../../shared/store/scoreDataStore";
 import type { ScoreEntry } from "../../../shared/store/types";
+import { Fade, Heading } from "@chakra-ui/react";
 
 export const TypingConsoleTitle: React.FC = () => {
   const status = useTypingStore.use.status();
@@ -30,31 +31,29 @@ export const TypingConsoleTitle: React.FC = () => {
   };
   return (
     <>
-      <h1>
+      <Heading as="h3" fontSize="2xl">
         {status === "FINISHED"
           ? `You typed ${correctWordsCount} words at ${wordsPerMinute} WPM. Accuracy: ${accuracy.toFixed(
               2
             )}%`
           : "Test Your Typing Speed, Scrub!"}
-      </h1>
-      {status === "FINISHED" && (
-        <div>
-          <input
-            type="text"
-            name="usename"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <button type="button" onClick={onSaveScoreHandler}>
-            Save
-          </button>
-        </div>
-      )}
-      <h3>
+      </Heading>
+      <Fade in={status === "FINISHED"} unmountOnExit>
+        <input
+          type="text"
+          name="usename"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <button type="button" onClick={onSaveScoreHandler}>
+          Save
+        </button>
+      </Fade>
+      <Heading as="h4" fontSize="lg">
         {status === "FINISHED"
           ? "Refresh to retake the test!"
           : "Type the following:"}
-      </h3>
+      </Heading>
     </>
   );
 };

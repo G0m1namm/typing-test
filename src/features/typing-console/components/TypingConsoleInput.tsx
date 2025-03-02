@@ -3,6 +3,7 @@ import { useTypingStore } from "../store/typingTestStore";
 import { useTextStore } from "../store/textStore";
 import { TypingConsoleTimer } from "./TypingConsoleTimer";
 import { useTimer } from "react-timer-hook";
+import { Box, Input } from "@chakra-ui/react";
 
 const time = new Date();
 time.setSeconds(time.getSeconds() + 30); // Expire in 2min
@@ -60,15 +61,16 @@ export const TypingInput = () => {
   return (
     <>
       <TypingConsoleTimer seconds={seconds} minutes={minutes} />
-      <div>
-        <input
+      <Box>
+        <Input
           type="text"
           name="text"
           value={enteredText}
           onChange={onInputChange}
           onKeyDown={onKeyDownChange}
+          placeholder="Start typing here ..."
         />
-      </div>
+      </Box>
     </>
   );
 };

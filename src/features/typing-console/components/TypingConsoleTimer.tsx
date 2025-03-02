@@ -1,7 +1,12 @@
-export const TypingConsoleTimer: React.FC<{seconds: number, minutes: number}> = ({seconds, minutes}) => {
+import { Box } from "@chakra-ui/react";
+
+export const TypingConsoleTimer: React.FC<{
+  seconds: number;
+  minutes: number;
+}> = ({ seconds, minutes }) => {
   return (
-    <div style={{ fontSize: "100px" }}>
+    <Box fontSize="xl">
       <span>{minutes}</span>:<span>{seconds}</span>
-    </div>
+    </Box>
   );
 };
