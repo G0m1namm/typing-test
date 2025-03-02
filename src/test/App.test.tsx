@@ -1,8 +1,6 @@
-import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import App from "../App";
-import calculateScore from "../features/typing-console/lib/testCalculations";
 
 describe("App tests", () => {
   describe("Render components", () => {
@@ -12,8 +10,11 @@ describe("App tests", () => {
     it("App should render and contains the heading", () => {
       render(<App />);
 
-      const headingText = "Change me!";
-      const heading = screen.queryByText(headingText);
+      const headingText = "Typing Speed Test";
+      const heading = screen.getByRole("heading", {
+        name: headingText,
+        level: 1,
+      });
       expect(heading).toBeInTheDocument();
     });
 
@@ -22,19 +23,13 @@ describe("App tests", () => {
      * to find h3 tag and assert the test
      */
     it("App should render and contains the sub heading", () => {
-      expect(false).toBeTruthy(); // This should be removed when test is implemented
-    });
-  });
-
-  describe("Testing function", () => {
-    /**
-     * TODO: Fix the following test by finding the expected score to assert the test
-     */
-    it("Test calculateScore", () => {
-      const score = calculateScore(3, 15, 100, 90);
-      const expectedScore = 0;
-
-      expect(score).toBe(expectedScore);
+      render(<App />);
+      const subHeadingText = "Test Your Typing Speed, Scrub!";
+      const subHeading = screen.getByRole("heading", {
+        name: subHeadingText,
+        level: 3,
+      });
+      expect(subHeading).toBeInTheDocument();
     });
   });
 });

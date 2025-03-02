@@ -31,13 +31,7 @@ export const TypingConsoleTitle: React.FC = () => {
   };
   return (
     <>
-      <Heading as="h3" fontSize="2xl">
-        {status === "FINISHED"
-          ? `You typed ${correctWordsCount} words at ${wordsPerMinute} WPM. Accuracy: ${accuracy.toFixed(
-              2
-            )}%`
-          : "Test Your Typing Speed, Scrub!"}
-      </Heading>
+      
       <Fade in={status === "FINISHED"} unmountOnExit>
         <input
           type="text"

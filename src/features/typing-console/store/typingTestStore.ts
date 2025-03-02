@@ -31,7 +31,7 @@ const useTypingStoreBase = create<TypingStore>()(
             const { typeLogs } = get()
             set({ typeLogs: [...typeLogs, newLog] })
         },
-        startTest: () => set({ startTime: Date.now(), endTime: null }),
+        startTest: () => set({ startTime: Date.now(), endTime: null, status: "ACTIVE" }),
         endTest: (initialText) => {
             const endTime = Date.now();
             const { startTime, typeLogs } = get()
@@ -42,7 +42,7 @@ const useTypingStoreBase = create<TypingStore>()(
             }
             set({ wpm: calculatedWPM })
 
-            const { finalAccuracy, deletedErrorCount } = calcAccuracyAndDeletions(initialText, typeLogs)
+            const { finalAccuracy, deletedErrorCount } = calcAccuracyAndDeletions(typeLogs)
             const score = calculateScore(initialText.length, calculatedWPM, finalAccuracy, deletedErrorCount)
             set({
                 endTime,

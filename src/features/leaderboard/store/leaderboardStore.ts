@@ -13,21 +13,21 @@ const initialState: LeaderboardStoreState = {
 const useLeaderboardBase = create<LeaderboardStore>()((set) => ({
     ...initialState,
     fetchLeaderboard: async () => {
-        set({isLoading: true, error: null})
+        set({ isLoading: true, error: null })
 
         try {
             const result = await getLeaderboard()
-            
-            if(result.error) {
+
+            if (result.error) {
                 throw new Error(result.error)
             }
 
-            set({leaderboard: result.data ?? [], isLoading: false})
+            set({ leaderboard: result.data ?? [], isLoading: false, error: null })
         } catch (error) {
-            console.error("Failed to fetch the leaderboard:", error);
-            set({ 
-              error: "Failed to fetch the leaderboard", 
-              isLoading: false 
+            set({
+                error: "Failed to fetch the leaderboard",
+                isLoading: false,
+                leaderboard: []
             });
         }
     }

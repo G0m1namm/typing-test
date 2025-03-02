@@ -3,36 +3,53 @@ import type { LogData } from "../store/types";
 export const calcWordsPerMinute = (charsTyped: number, millis: number): number =>
     Math.floor(charsTyped / 5 / (millis / 60000));
 
-export const calcAccuracyAndDeletions = (initialText: string, logs: LogData[]) => {
-    let currentTypedWord = "";
+export const calcAccuracyAndDeletions = (logs: LogData[]) => {
+    let correctChars = 0;
+    let totalChars = 0;
     let deletedErrorCount = 0;
-    const errorStatus = [];
+    let currentWord = '';
+    let currentTypedWord = '';
+    let errorStatus: boolean[] = [];
 
     for (const log of logs) {
         if (log.action === "typing") {
-            currentTypedWord += log.character
-            const expectedChar = log.word[currentTypedWord.length - 1]
+            // Reset tracking when encountering a new word
+            if (log.word !== currentWord) {
+                currentWord = log.word;
+                currentTypedWord = '';
+            }
 
-            errorStatus.push(Boolean(log.character !== expectedChar));
-        }
-        if (log.action === "delete") {
+            totalChars++;
+            currentTypedWord += log.character;
+
+            // Get expected character based on current word progress
+            const expectedChar = currentWord[currentTypedWord.length - 1];
+            const isCorrect = log.character === expectedChar;
+
+            errorStatus.push(!isCorrect);
+
+            if (isCorrect) {
+                correctChars++;
+            }
+        } else if (log.action === "delete") {
             if (currentTypedWord.length > 0) {
                 currentTypedWord = currentTypedWord.slice(0, -1);
-
                 if (errorStatus.length > 0 && errorStatus.pop() === true) {
-                    deletedErrorCount++
+                    deletedErrorCount++;
                 }
             }
         }
     }
 
-    const finalAccuracy = ((currentTypedWord.length) / initialText.length) * 100;
+    const finalAccuracy = totalChars > 0
+        ? Math.round((correctChars / totalChars) * 100)
+        : 100;
 
     return {
         finalAccuracy,
-        deletedErrorCount
-    }
-}
+        deletedErrorCount,
+    };
+};
 
 export const calculateScore = (
     words: number, // How many words the user types for the duration of the test

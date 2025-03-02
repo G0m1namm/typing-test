@@ -14,8 +14,23 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import "./App.css";
+import { useTypingStore } from "./features/typing-console/store/typingTestStore";
+import { useTextStore } from "./features/typing-console/store/textStore";
 
 const App: React.FC = () => {
+  const status = useTypingStore.use.status();
+  const accuracy = useTypingStore.use.accuracy();
+  const wordsPerMinute = useTypingStore.use.wpm();
+  const currentWordIndex = useTextStore.use.currentWordIndex();
+  const correctWordsCount = currentWordIndex;
+
+  const subHeadingText =
+    status === "FINISHED"
+      ? `You typed ${correctWordsCount} words at ${wordsPerMinute} WPM. Accuracy: ${accuracy.toFixed(
+          2
+        )}%`
+      : "Test Your Typing Speed, Scrub!";
+
   return (
     <Container
       maxW="container.xl"
@@ -35,7 +50,10 @@ const App: React.FC = () => {
       >
         <Box mb="10">
           <Center>
-            <Heading>Typing Speed Test</Heading>
+            <Heading as="h1">Typing Speed Test</Heading>
+            <Heading as="h3" fontSize="2xl">
+              {subHeadingText}
+            </Heading>
           </Center>
         </Box>
         <Tabs isFitted w="full">

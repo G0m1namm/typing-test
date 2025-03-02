@@ -1,7 +1,7 @@
-export type LogData = {
-    action: "typing" | "delete",
-    character: string,
-    word: string
+export interface LogData {
+    action: 'typing' | 'delete';
+    character: string;
+    word: string;
 }
 
 export type TestStatus = "IDLE" | "ACTIVE" | "FINISHED"
@@ -36,6 +36,7 @@ export type TextStoreState = {
 export type TextStoreActions = {
     moveNextWord: () => void,
     getRemainingWords: () => string[],
+    resetStore: () => void,
 }
 
 export type TextStore = TextStoreState & TextStoreActions
