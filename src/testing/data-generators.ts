@@ -70,11 +70,15 @@ export const createMockScoreDataStore: StateCreator<ScoreDataStore> = (set) => (
 });
 
 // Mock data generator for TextStore
-export const createMockTextStore: StateCreator<TextStore> = (set) => ({
+export const createMockTextStore: StateCreator<TextStore> = (set, get) => ({
   initialText: 'example mock data',
   currentWordIndex: 0,
   moveNextWord: () => set((state) => ({ currentWordIndex: state.currentWordIndex + 1 })),
-  getRemainingWords: () => ['example', 'mock', 'data'],
+  getRemainingWords: () => {
+    const { currentWordIndex, initialText } = get()
+    const words = initialText.trim().split(" ")
+    return words.slice(currentWordIndex)
+  },
   resetStore: () => set({initialText: 'example mock data', currentWordIndex: 0, })
 });
 
