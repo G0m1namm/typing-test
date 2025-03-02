@@ -5,6 +5,7 @@ import { useTypingStore } from "./features/typing-console/store/typingTestStore"
 import { TypingConsoleTitle } from "./features/typing-console/components/TypingConsoleTitle";
 import { TypingConsole } from "./features/typing-console/components/TypingConsole";
 import { useTextStore } from "./features/typing-console/store/textStore";
+import { Leaderboard } from "./features/leaderboard/components/Leaderboard";
 
 const App: React.FC = () => {
   const onRestartTest = useTypingStore.use.resetTest();
@@ -32,6 +33,11 @@ const App: React.FC = () => {
         <button onClick={onRestartTest}>Restart</button>
       </div>
       <TypingInput />
+
+      <div>
+        <h2>Leaderboard</h2>
+        <Leaderboard />
+      </div>
     </div>
   );
 };

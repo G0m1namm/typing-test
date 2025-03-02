@@ -1,4 +1,4 @@
-import { TypedWord } from "../../../components/TypedWord";
+import { TypedWord } from "./TypedWord";
 import { TypingStoreState } from "../store/types";
 
 type TypingConsoleProps = {
