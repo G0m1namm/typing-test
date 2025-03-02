@@ -1,10 +1,10 @@
 import { StateCreator } from 'zustand';
 import type { ScoreDataStore, ScoreEntry } from '../shared/store/types';
-import type { TextStore, TypingStore, LogData } from '../features/typing-console/store/types';
+import type { TextStore, TypingStore } from '../features/typing-console/store/types';
 import type { LeaderboardStore } from '../features/leaderboard/store/types';
 
+// Mock single score entry for savesScore in ScoreDataStore
 export const createMockScoreEntry = (): ScoreEntry => ({
-  id: 2,
   score: 100,
   accuracy: 0.5,
   firstStrikeAccuracy: 0.5,
@@ -14,21 +14,7 @@ export const createMockScoreEntry = (): ScoreEntry => ({
 });
 
 export const createMockScoreEntries = (count: number): ScoreEntry[] => {
-  return Array.from({ length: count }, () => createMockScoreEntry());
-};
-
-export const createMockTypeLog = (logData: Partial<LogData> = {}): LogData => {
-  const defaultLog: LogData = {
-    action: 'typing',
-    character: 'a',
-    word: 'example',
-  };
-
-  return { ...defaultLog, ...logData };
-};
-
-export const createMockTypeLogs = (count: number, logData: Partial<LogData> = {}): LogData[] => {
-  return Array.from({ length: count }, () => createMockTypeLog(logData));
+  return Array.from({ length: count }, () => ({ ...createMockScoreEntry(), id: 2 }));
 };
 
 // Mock data generator for TypingStore
@@ -65,6 +51,7 @@ export const createMockScoreDataStore: StateCreator<ScoreDataStore> = (set) => (
   error: null,
   savesScore: async () => {
     set({ isLoading: true });
+    await new Promise((resolve) => setTimeout(resolve, 100))
     set({ isLoading: false });
   },
 });
