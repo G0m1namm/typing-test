@@ -1,26 +1,19 @@
-import { type ChangeEvent, type KeyboardEvent, useCallback, useMemo } from "react";
+import { type ChangeEvent, type KeyboardEvent, useMemo } from "react";
 import { useTypingStore } from "../store/typingTestStore";
 import { useTextStore } from "../store/textStore";
-import { TypingConsoleTimer } from "./TypingConsoleTimer";
-import { useTimer } from "react-timer-hook";
 import { Box, Input } from "@chakra-ui/react";
 
-const time = new Date();
-time.setSeconds(time.getSeconds() + 30); // Expire in 2min
-
-export const TypingInput = () => {
+export const TypingInput: React.FC<{ onStart: () => void }> = ({ onStart }) => {
   // Typing Test Store
   const setEnteredText = useTypingStore.use.setEnteredText();
   const enteredText = useTypingStore.use.enteredText();
   const status = useTypingStore.use.status();
   const logger = useTypingStore.use.setTypeLogs();
-  const endTest = useTypingStore.use.endTest();
 
   // Text Store
   const getRemainingWords = useTextStore.use.getRemainingWords();
   const moveNextWord = useTextStore.use.moveNextWord();
   const currentWordIndex = useTextStore.use.currentWordIndex();
-  const initialText = useTextStore.use.initialText();
 
   const remainingWords = useMemo(
     () => getRemainingWords(),
@@ -28,18 +21,8 @@ export const TypingInput = () => {
   );
   const currentWord = useMemo(() => remainingWords[0] ?? 0, [remainingWords]);
 
-  const onExpireHandler = useCallback(() => {
-    endTest(initialText);
-  }, [initialText, endTest]);
-
-  const { seconds, minutes, start } = useTimer({
-    expiryTimestamp: time,
-    onExpire: () => onExpireHandler(),
-    autoStart: false,
-  });
-
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEnteredText(e.target.value, () => start());
+    setEnteredText(e.target.value, () => onStart());
   };
 
   const onKeyDownChange = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -56,21 +39,19 @@ export const TypingInput = () => {
     }
   };
 
-  if (status !== "IDLE") return <></>;
+  if (status === "FINISHED") return <></>;
 
   return (
-    <>
-      <TypingConsoleTimer seconds={seconds} minutes={minutes} />
-      <Box>
-        <Input
-          type="text"
-          name="text"
-          value={enteredText}
-          onChange={onInputChange}
-          onKeyDown={onKeyDownChange}
-          placeholder="Start typing here ..."
-        />
-      </Box>
-    </>
+    <Box>
+      <Input
+        type="text"
+        name="text"
+        value={enteredText}
+        onChange={onInputChange}
+        onKeyDown={onKeyDownChange}
+        placeholder="Start typing here ..."
+        autoFocus={true}
+      />
+    </Box>
   );
 };

@@ -16,6 +16,7 @@ import {
 import "./App.css";
 import { useTypingStore } from "./features/typing-console/store/typingTestStore";
 import { useTextStore } from "./features/typing-console/store/textStore";
+import { useMemo } from "react";
 
 const App: React.FC = () => {
   const status = useTypingStore.use.status();
@@ -24,12 +25,15 @@ const App: React.FC = () => {
   const currentWordIndex = useTextStore.use.currentWordIndex();
   const correctWordsCount = currentWordIndex;
 
-  const subHeadingText =
-    status === "FINISHED"
-      ? `You typed ${correctWordsCount} words at ${wordsPerMinute} WPM. Accuracy: ${accuracy.toFixed(
-          2
-        )}%`
-      : "Test Your Typing Speed, Scrub!";
+  const subHeadingText = useMemo(
+    () =>
+      status === "FINISHED"
+        ? `You typed ${correctWordsCount} words at ${wordsPerMinute} WPM. Accuracy: ${accuracy.toFixed(
+            2
+          )}%`
+        : "Test Your Typing Speed, Scrub!",
+    [correctWordsCount, wordsPerMinute, accuracy]
+  );
 
   return (
     <Container
@@ -49,9 +53,11 @@ const App: React.FC = () => {
         my="20"
       >
         <Box mb="10">
-          <Center>
-            <Heading as="h1">Typing Speed Test</Heading>
-            <Heading as="h3" fontSize="2xl">
+          <Center display="grid">
+            <Heading as="h1" mb="3">
+              Typing Speed Test
+            </Heading>
+            <Heading as="h3" fontSize="2xl" color="gray">
               {subHeadingText}
             </Heading>
           </Center>

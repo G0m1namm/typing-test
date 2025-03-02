@@ -13,9 +13,11 @@ export const TypingConsole: React.FC<TypingConsoleProps> = ({
   return (
     <Box
       p="4"
-      bg="blue.100"
+      bg="gray.50"
       rounded="md"
-      maxH="150px"
+      w="70vw"
+      h={{ base: "200px", md: "150px" }}
+      maxW="1000px"
       overflowX="hidden"
       overflowY="auto"
     >

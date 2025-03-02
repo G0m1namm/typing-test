@@ -20,7 +20,7 @@
 
     + span {
       text-decoration: underline;
-      accent-color: var(--underline-word-color, blue);
+      text-decoration-color: var(--underline-word-color, blue);
     }
   }
 }

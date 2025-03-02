@@ -18,6 +18,7 @@ describe('ScoreDataStore', () => {
             expect(state).toMatchObject({
                 isLoading: false,
                 error: null,
+                success: false
             });
         });
     });
@@ -47,7 +48,8 @@ describe('ScoreDataStore', () => {
                 const currentState = updatedStore.current;
                 expect(currentState).toMatchObject({
                     isLoading: false,
-                    error: null
+                    error: null,
+                    success: true
                 });
             });
         });
@@ -101,7 +103,37 @@ describe('ScoreDataStore', () => {
             const currentState = updatedStore.current;
             expect(currentState).toMatchObject({
                 isLoading: false,
-                error: mockError
+                error: mockError,
+                success: false
+            });
+        });
+
+    });
+
+    describe('resetStore', () => {
+        it('should restore initial state', () => {
+            const { result } = renderHook(() => useScoreDataStore);
+
+            act(() => {
+                result.current.setState({
+                    success: true,
+                    error: null,
+                    isLoading: false
+                });
+            });
+
+            act(() => {
+                result.current.getState().resetStore();
+            });
+
+
+            const { result: newStore } = renderHook(() => useScoreDataStore.getState());
+            const state = newStore.current;
+
+            expect(state).toMatchObject({
+                success: false,
+                error: null,
+                isLoading: false
             });
         });
     });

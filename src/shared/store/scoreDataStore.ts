@@ -6,7 +6,8 @@ import { createScore } from "../api/createScore"
 
 const initialState: ScoreDataStoreState = {
     isLoading: false,
-    error: null
+    error: null,
+    success: false
 }
 
 const useScoreDataBase = create<ScoreDataStore>()((set) => ({
@@ -15,16 +16,22 @@ const useScoreDataBase = create<ScoreDataStore>()((set) => ({
         set({isLoading: true, error: null})
 
         try {
-            await createScore({data: results})
-            set({isLoading: false})
+            const result = await createScore({ data: results })
+
+            if (result.error) {
+                throw new Error(result.error)
+            }
+            set({ isLoading: false, success: true })
         } catch (error) {
             console.error("Failed to save score:", error);
             set({ 
               error: "Failed to save your score", 
-              isLoading: false 
+                isLoading: false,
+                success: false
             });
         }
-    }
+    },
+    resetStore: () => set(initialState)
 }))
 
 export const useScoreDataStore = createSelectors(useScoreDataBase)
