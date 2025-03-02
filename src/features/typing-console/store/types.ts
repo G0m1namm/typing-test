@@ -19,7 +19,7 @@ export type TypingStoreState = {
 }
 
 export type TypingStoreActions = {
-    setEnteredText: (text: string) => void,
+    setEnteredText: (text: string, callback?: () => void) => void,
     setTypeLogs: (log: LogData) => void,
     startTest: () => void,
     endTest: (initialText: string) => void,

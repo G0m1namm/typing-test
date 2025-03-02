@@ -49,7 +49,9 @@ export const TypingConsoleTitle: React.FC = () => {
         </div>
       )}
       <h3>
-        {wordsPerMinute ? `Refresh to retake the test!` : `Type the following:`}
+        {status === "FINISHED"
+          ? `Refresh to retake the test!`
+          : `Type the following:`}
       </h3>
     </>
   );

@@ -13,16 +13,17 @@ const initialState: TypingStoreState = {
     status: "IDLE",
     wpm: 0,
     accuracy: 0,
-    score: 0
+    score: 0,
 }
 
 const useTypingStoreBase = create<TypingStore>()(
     subscribeWithSelector((set, get) => ({
         ...initialState,
-        setEnteredText: (text) => {
+        setEnteredText: (text, initTimer) => {
             const { startTime, startTest } = get()
             if (!startTime) {
                 startTest();
+                initTimer?.();
             }
             set({ enteredText: text.trim() })
         },

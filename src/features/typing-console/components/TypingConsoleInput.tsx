@@ -1,23 +1,44 @@
-import { ChangeEvent, KeyboardEvent, useMemo } from "react";
+import { ChangeEvent, KeyboardEvent, useCallback, useMemo } from "react";
 import { useTypingStore } from "../store/typingTestStore";
 import { useTextStore } from "../store/textStore";
+import { TypingConsoleTimer } from "./TypingConsoleTimer";
+import { useTimer } from "react-timer-hook";
+
+const time = new Date();
+time.setSeconds(time.getSeconds() + 30); // Expire in 2min
 
 export const TypingInput = () => {
+  // Typing Test Store
   const setEnteredText = useTypingStore.use.setEnteredText();
   const enteredText = useTypingStore.use.enteredText();
   const status = useTypingStore.use.status();
+  const logger = useTypingStore.use.setTypeLogs();
+  const endTest = useTypingStore.use.endTest();
+
+  // Text Store
   const getRemainingWords = useTextStore.use.getRemainingWords();
   const moveNextWord = useTextStore.use.moveNextWord();
   const currentWordIndex = useTextStore.use.currentWordIndex();
-  const logger = useTypingStore.use.setTypeLogs();
+  const initialText = useTextStore.use.initialText();
+
   const remainingWords = useMemo(
     () => getRemainingWords(),
     [getRemainingWords, currentWordIndex]
   );
   const currentWord = useMemo(() => remainingWords[0] ?? 0, [remainingWords]);
 
+  const onExpireHandler = useCallback(() => {
+    endTest(initialText);
+  }, [initialText, endTest]);
+
+  const { seconds, minutes, start } = useTimer({
+    expiryTimestamp: time,
+    onExpire: () => onExpireHandler(),
+    autoStart: false,
+  });
+
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEnteredText(e.target.value);
+    setEnteredText(e.target.value, () => start());
   };
 
   const onKeyDownChange = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -37,14 +58,17 @@ export const TypingInput = () => {
   if (status !== "IDLE") return <></>;
 
   return (
-    <div>
-      <input
-        type="text"
-        name="text"
-        value={enteredText}
-        onChange={onInputChange}
-        onKeyDown={onKeyDownChange}
-      />
-    </div>
+    <>
+      <TypingConsoleTimer seconds={seconds} minutes={minutes} />
+      <div>
+        <input
+          type="text"
+          name="text"
+          value={enteredText}
+          onChange={onInputChange}
+          onKeyDown={onKeyDownChange}
+        />
+      </div>
+    </>
   );
 };
