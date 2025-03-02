@@ -6,8 +6,22 @@ let leaderboard: ScoreEntry[] = [
   { id: 2, username: "Bob", score: 90, accuracy: 0.8, firstStrikeAccuracy: 0.78, wpm: 20, words: 300 },
 ];
 
+/**
+ * handlers - An array of request handlers for MSW (Mock Service Worker).
+ *
+ * These handlers intercept HTTP requests during testing and respond with mock data.
+ */
 export const handlers = [
-  // POST /leaderboard to create a score entry
+  /**
+   * POST /leaderboard
+   *
+   * Handler to create a new score entry:
+   * - Reads the JSON body from the request.
+   * - Generates a new id based on the current number of leaderboard entries.
+   * - Merges the new id with the incoming data to form a complete score entry.
+   * - Appends the new entry to the leaderboard.
+   * - Returns the newly created entry with a 201 status.
+   */
   http.post(`${process.env.REACT_APP_API_BASE_URL}/leaderboard`, async ({ request }) => {
     const data = await request.json() as Omit<ScoreEntry, 'id'>;
     const newEntry = { id: leaderboard.length + 1, ...data };
@@ -15,7 +29,14 @@ export const handlers = [
     return HttpResponse.json(newEntry, { status: 201 });
   }),
 
-  // GET /leaderboard to return the leaderboard (sorted when _sort=score is provided)
+  /**
+   * GET /leaderboard
+   *
+   * Handler to retrieve the leaderboard:
+   * - Optionally sorts the leaderboard based on a query parameter "_sort".
+   * - If _sort is "score", the leaderboard is sorted in descending order by score.
+   * - Returns the processed leaderboard with a 200 status.
+   */
   http.get(`${process.env.REACT_APP_API_BASE_URL}/leaderboard`, ({ request }) => {
     const url = new URL(request.url);
     const sort = url.searchParams.get("_sort");

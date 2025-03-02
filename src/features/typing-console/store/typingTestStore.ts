@@ -16,6 +16,14 @@ const initialState: TypingStoreState = {
     score: 0,
 }
 
+/**
+ * useTypingStoreBase - Base store created using zustand enhanced with subscribeWithSelector.
+ *
+ * This store manages the state and behaviors for the typing test, including:
+ *   - Recording entered text.
+ *   - Tracking user actions (typing and deletion) via logs.
+ *   - Managing test start, end, and reset functionalities.
+ */
 const useTypingStoreBase = create<TypingStore>()(
     subscribeWithSelector((set, get) => ({
         ...initialState,
@@ -51,4 +59,6 @@ const useTypingStoreBase = create<TypingStore>()(
         resetTest: () => set(initialState)
     })))
 
+// Enhances the typing test store with selectors for more streamlined state access,
+// and exports the final store for use in the application.
 export const useTypingStore = createSelectors(useTypingStoreBase)

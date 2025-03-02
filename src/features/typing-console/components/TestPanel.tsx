@@ -23,54 +23,83 @@ import { useScoreDataStore } from "../../../shared/store/scoreDataStore";
 import { useTimer } from "react-timer-hook";
 import { TypingConsoleTimer } from "./TypingConsoleTimer";
 
+// Set initial timer duration to 2 minutes from now
 const time = new Date();
 time.setSeconds(time.getSeconds() + 120); // Expire in 2min
 
+/**
+ * TestPanel Component
+ *
+ * Main component that orchestrates the typing test functionality.
+ * Manages the test state, user input, scoring, and test completion actions.
+ */
 export const TestPanel: React.FC = () => {
+  // Store hooks for managing test state
   const resetTest = useTypingStore.use.resetTest();
   const enteredText = useTypingStore.use.enteredText();
   const status = useTypingStore.use.status();
   const endTest = useTypingStore.use.endTest();
+
+  // Text store hooks for managing displayed text
   const getRemainingWords = useTextStore.use.getRemainingWords();
   const resetTextStore = useTextStore.use.resetStore();
   const initialText = useTextStore.use.initialText();
   const currentWordIndex = useTextStore.use.currentWordIndex();
+
+  // Local state for username input
   const [username, setUsername] = useState("");
+
+  // Performance metrics hooks
   const accuracy = useTypingStore.use.accuracy();
   const score = useTypingStore.use.score();
-  const saveScore = useScoreDataStore.use.savesScore();
-  const resetScoreState = useScoreDataStore.use.resetStore();
   const wordsPerMinute = useTypingStore.use.wpm();
   const correctWordsCount = currentWordIndex;
-  const defaultUsername = `Anonym${Date.now()}`;
-  const toast = useToast();
 
+  // Score saving related hooks
+  const saveScore = useScoreDataStore.use.savesScore();
+  const resetScoreState = useScoreDataStore.use.resetStore();
   const saveScoreSuccess = useScoreDataStore.use.success();
   const saveScoreError = useScoreDataStore.use.error();
   const isSaveScoreLoading = useScoreDataStore.use.isLoading();
 
+  // Fallback username for anonymous users
+  const defaultUsername = `Anonym${Date.now()}`;
+  const toast = useToast();
+
+  // Memoized values to prevent unnecessary re-renders
   const words = useMemo(
     () => getRemainingWords(),
     [getRemainingWords, currentWordIndex]
   );
   const hasFinished = useMemo(() => status === "FINISHED", [status]);
 
+  /**
+   * Handler for timer expiration
+   * Ends the test when the timer reaches zero
+   */
   const onExpireHandler = useCallback(() => {
     endTest(initialText);
   }, [initialText, endTest]);
 
+  // Timer hook configuration
   const { seconds, minutes, start, restart } = useTimer({
     expiryTimestamp: time,
     onExpire: () => onExpireHandler(),
     autoStart: false,
   });
 
+  /**
+   * Effect to end test when all words are typed
+   */
   useEffect(() => {
     if (words.length === 0) {
       endTest(initialText);
     }
   }, [words.length, endTest, initialText]);
 
+  /**
+   * Effect to show success toast when score is saved
+   */
   useEffect(() => {
     if (saveScoreSuccess) {
       toast({
@@ -83,6 +112,10 @@ export const TestPanel: React.FC = () => {
     }
   }, [saveScoreSuccess]);
 
+  /**
+   * Handles saving the test score
+   * Creates a score entry with test results and saves it to the store
+   */
   const onSaveScoreHandler = async () => {
     const data: ScoreEntry = {
       id: Date.now(),
@@ -97,6 +130,10 @@ export const TestPanel: React.FC = () => {
     await saveScore(data);
   };
 
+  /**
+   * Handles restarting the test
+   * Resets timer, test state, text store, and score state
+   */
   const onRestartTestHandler = () => {
     const time = new Date();
     time.setSeconds(time.getSeconds() + 120); // Expire in 2min

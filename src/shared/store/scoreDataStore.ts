@@ -10,6 +10,12 @@ const initialState: ScoreDataStoreState = {
     success: false
 }
 
+/**
+ * useScoreDataBase - Base store created using zustand.
+ *
+ * This store manages the state related to saving scores.
+ * It includes actions to attempt saving a score entry via an API call and resetting the store.
+ */
 const useScoreDataBase = create<ScoreDataStore>()((set) => ({
     ...initialState,
     savesScore: async (results) => {
@@ -34,4 +40,5 @@ const useScoreDataBase = create<ScoreDataStore>()((set) => ({
     resetStore: () => set(initialState)
 }))
 
+// Export the store enhanced with selectors to facilitate easier state access from components.
 export const useScoreDataStore = createSelectors(useScoreDataBase)

@@ -10,6 +10,10 @@ const initialState: LeaderboardStoreState = {
     leaderboard: []
 }
 
+/**
+ * Creates the base store using zustand.
+ * The store provides state management for the leaderboard feature.
+ */
 const useLeaderboardBase = create<LeaderboardStore>()((set) => ({
     ...initialState,
     fetchLeaderboard: async () => {
@@ -33,4 +37,5 @@ const useLeaderboardBase = create<LeaderboardStore>()((set) => ({
     }
 }))
 
+// Enhance the base store with selectors for easier state selection and export it.
 export const useLeaderboardStore = createSelectors(useLeaderboardBase)
