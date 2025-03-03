@@ -4,7 +4,7 @@ export interface LogData {
     word: string;
 }
 
-export type TestStatus = "IDLE" | "ACTIVE" | "FINISHED"
+export type TestStatus = "IDLE" | "RUNNING" | "FINISHED";
 
 export type TypingStoreState = {
     enteredText: string,
@@ -23,7 +23,7 @@ export type TypingStoreActions = {
     setTypeLogs: (log: LogData) => void,
     startTest: () => void,
     endTest: (initialText: string) => void,
-    resetTest: () => void,
+    resetTest: (initialText: string) => void,
 }
 
 export type TypingStore = TypingStoreState & TypingStoreActions

@@ -1,6 +1,5 @@
 import type React from "react";
 import { Leaderboard } from "./features/leaderboard/components/Leaderboard";
-import { TestPanel } from "./features/typing-console/components/TestPanel";
 import {
   Box,
   Center,
@@ -17,6 +16,7 @@ import "./App.css";
 import { useTypingStore } from "./features/typing-console/store/typingTestStore";
 import { useTextStore } from "./features/typing-console/store/textStore";
 import { useMemo } from "react";
+import { TypingTestContainer } from "./features/typing-console/containers/TypingTestContainer";
 
 const App: React.FC = () => {
   const status = useTypingStore.use.status();
@@ -62,14 +62,14 @@ const App: React.FC = () => {
             </Heading>
           </Center>
         </Box>
-        <Tabs isFitted w="full">
+        <Tabs isFitted w="full" isLazy>
           <TabList mb="1em">
             <Tab>Typing Zone</Tab>
             <Tab>Leaderboard</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-              <TestPanel />
+              <TypingTestContainer />
             </TabPanel>
             <TabPanel>
               <Leaderboard />

@@ -29,5 +29,5 @@ export const createMockScoreEntry = (): ScoreEntry => ({
  * @returns {ScoreEntry[]} An array of mock score entries.
  */
 export const createMockScoreEntries = (count: number): ScoreEntry[] => {
-  return Array.from({ length: count }, () => ({ ...createMockScoreEntry(), id: 2 }));
+  return Array.from({ length: count }, (_, index) => ({ ...createMockScoreEntry(), id: index + 1 }));
 };

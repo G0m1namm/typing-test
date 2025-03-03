@@ -36,7 +36,7 @@ const useTypingStoreBase = create<TypingStore>()(
             set({ enteredText: text.trim() })
         },
         setTypeLogs: (newLog: LogData) => set((state) => ({ typeLogs: [...state.typeLogs, newLog] })),
-        startTest: () => set({ startTime: Date.now(), endTime: null, status: "ACTIVE" }),
+        startTest: () => set({ startTime: Date.now(), endTime: null, status: "RUNNING" }),
         endTest: (initialText: string) => {
             const endTime = Date.now();
             const { startTime, typeLogs } = get()

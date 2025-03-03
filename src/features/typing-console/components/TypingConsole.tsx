@@ -1,39 +1,45 @@
 import { TypedWord } from "./TypedWord";
-import type { TypingStoreState } from "../store/types";
-import { Box, Heading } from "@chakra-ui/react";
+import { TypingInput } from "./TypingConsoleInput";
+import { Box, Heading, VStack } from "@chakra-ui/react";
 
-type TypingConsoleProps = {
+interface TypingConsoleProps {
   words: string[];
-} & Pick<TypingStoreState, "enteredText">;
+  enteredText: string;
+  onStart: () => void;
+}
 
 export const TypingConsole: React.FC<TypingConsoleProps> = ({
   enteredText,
   words,
+  onStart,
 }) => {
   return (
-    <Box
-      p="4"
-      bg="gray.50"
-      rounded="md"
-      w="70vw"
-      h={{ base: "200px", md: "150px" }}
-      maxW="1000px"
-      overflowX="hidden"
-      overflowY="auto"
-    >
-      <Heading as="h6">
-        {words.map((word, index) =>
-          word === words[0] ? (
-            <TypedWord
-              word={word}
-              inputText={enteredText}
-              key={`${word}-${index}-${word.length}`}
-            />
-          ) : (
-            `${word} `
-          )
-        )}
-      </Heading>
-    </Box>
+    <VStack spacing={4} width="full">
+      <Box
+        p="4"
+        bg="gray.50"
+        rounded="md"
+        w="70vw"
+        h={{ base: "200px", md: "150px" }}
+        maxW="1000px"
+        overflowX="hidden"
+        overflowY="auto"
+      >
+        <Heading as="h6">
+          {words.map((word, index) =>
+            word === words[0] ? (
+              <TypedWord
+                word={word}
+                inputText={enteredText}
+                key={`${word}-${index}-${word.length}`}
+              />
+            ) : (
+              `${word} `
+            )
+          )}
+        </Heading>
+      </Box>
+      <TypingInput onStart={onStart} />
+    </VStack>
   );
 };

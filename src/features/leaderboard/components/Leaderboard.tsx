@@ -49,7 +49,7 @@ export const Leaderboard: React.FC = () => {
   if (isLoading)
     return (
       <Center w="full" py="10">
-        <Spinner size="xl" />
+        <Spinner size="xl" data-testid="loading-spinner" />
       </Center>
     );
 
@@ -85,7 +85,10 @@ export const Leaderboard: React.FC = () => {
           </Thead>
           <Tbody>
             {reversedLeaderboard.map((score: ScoreEntry) => (
-              <Tr key={score.id}>
+              <Tr
+                key={score.id}
+                data-testid={`score-${score.id}-${score.words}`}
+              >
                 <Td>{score.username}</Td>
                 <Td>{score.wpm}</Td>
                 <Td>{score.accuracy}</Td>
