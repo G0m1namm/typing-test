@@ -16,7 +16,7 @@ import "./App.css";
 import { useTypingStore } from "./features/typing-console/store/typingTestStore";
 import { useTextStore } from "./features/typing-console/store/textStore";
 import { useMemo } from "react";
-import { TypingTestContainer } from "./features/typing-console/containers/TypingTestContainer";
+import { TypingTestContainer } from "./features/typing-console/components/TypingTestContainer";
 
 const App: React.FC = () => {
   const status = useTypingStore.use.status();
