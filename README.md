@@ -2,6 +2,7 @@
 
 Quick start:
 Install dependencies: npm install
+Configure .env copying `.env.example`
 Start the server: npm start
 Start the DB server: npm run json-server
 Build on production: npm run build
