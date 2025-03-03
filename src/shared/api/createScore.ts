@@ -9,8 +9,7 @@ import type { ScoreEntry } from "../store/types";
  * This function uses the apiFetch utility to send the provided score data 
  * to the backend API endpoint. The request URL is built using the 
  * REACT_APP_API_BASE_URL environment variable, ensuring the correct base for the
- * current environment. The submitted data is stringified to JSON format along 
- * with the proper Content-Type header.
+ * current environment.
  *
  * @param {Object} params - The parameters for creating a score.
  * @param {ScoreEntry} params.data - The score data to be sent to the API.
