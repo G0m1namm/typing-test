@@ -3,16 +3,20 @@ import { useTypingStore } from "../store/typingTestStore";
 import { useTypingTest } from "../hooks/useTypingTest";
 import { Box, Input } from "@chakra-ui/react";
 
+interface TypingInputProps {
+  onStart: () => void;
+}
+
 /**
  * TypingInput Component
  *
  * A controlled input component that handles user typing during the typing test.
  * It manages word progression, input validation, and logging of user actions.
  *
- * @param {Object} props - Component props
+ * @param {TypingInputProps} props - Component props
  * @param {() => void} props.onStart - Callback function to trigger when typing starts
  */
-export const TypingInput: React.FC<{ onStart: () => void }> = ({ onStart }) => {
+export const TypingInput: React.FC<TypingInputProps> = ({ onStart }) => {
   const { enteredText, status, handleInputChange, handleWordComplete, words } =
     useTypingTest();
   const setTypeLogs = useTypingStore.use.setTypeLogs();

@@ -1,30 +1,30 @@
 import { act } from "react";
 import { useTextStore } from "../store/textStore";
-import { renderHook } from '../../../testing/test-utils'
-describe('TextStore', () => {
+import { renderHook } from "../../../testing/test-utils";
+describe("TextStore", () => {
   beforeEach(() => {
     const { result } = renderHook(() => useTextStore);
-    result.current.getState().resetStore()
-    result.current.setState({ initialText: "example mock data" })
+    result.current.getState().resetStore();
+    result.current.setState({ initialText: "example mock data" });
   });
 
-  describe('Initial State', () => {
-    it('should initialize with correct default values', () => {
+  describe("Initial State", () => {
+    it("should initialize with correct default values", () => {
       const { result } = renderHook(() => useTextStore);
       const state = result.current.getState();
-      
+
       const expectedState = {
         initialText: "example mock data",
-        currentWordIndex: 0
+        currentWordIndex: 0,
       };
 
       expect(state).toMatchObject(expectedState);
     });
   });
 
-  describe('Actions', () => {
-    describe('moveNextWord', () => {
-      it('should increment by 1 the currentWordIndex value', () => {
+  describe("Actions", () => {
+    describe("moveNextWord", () => {
+      it("should increment by 1 the currentWordIndex value", () => {
         const { result } = renderHook(() => useTextStore.getState());
         const currentIndex = result.current.currentWordIndex;
 
@@ -40,8 +40,8 @@ describe('TextStore', () => {
       });
     });
 
-    describe('getRemainingWords', () => {
-      it('should return an array of all strings from initialText', () => {
+    describe("getRemainingWords", () => {
+      it("should return an array of all strings from initialText", () => {
         const { result } = renderHook(() => useTextStore.getState());
         const initialText = result.current.initialText;
         const remainingWords = result.current.getRemainingWords();
@@ -50,7 +50,7 @@ describe('TextStore', () => {
         expect(remainingWords).toEqual(expectedArray);
       });
 
-      it('should remove first item when currentWordIndex increases', () => {
+      it("should remove first item when currentWordIndex increases", () => {
         const { result } = renderHook(() => useTextStore.getState());
         const initialRemainingWords = result.current.getRemainingWords();
 
@@ -69,8 +69,8 @@ describe('TextStore', () => {
       });
     });
 
-    describe('resetStore', () => {
-      it('should restore initial state', () => {
+    describe("resetStore", () => {
+      it("should restore initial state", () => {
         const { result } = renderHook(() => useTextStore);
 
         act(() => {
@@ -82,7 +82,6 @@ describe('TextStore', () => {
         act(() => {
           result.current.getState().resetStore();
         });
-
 
         const { result: newStore } = renderHook(() => useTextStore.getState());
         const state = newStore.current;

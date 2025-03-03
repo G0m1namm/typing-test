@@ -8,7 +8,7 @@ interface TypingMetricsProps {
 
 /**
  * TypingMetrics Component
- * 
+ *
  * Displays real-time metrics for the typing test including:
  * - Words per minute (WPM)
  * - Accuracy percentage
@@ -20,7 +20,14 @@ export const TypingMetrics: React.FC<TypingMetricsProps> = ({
   wordCount,
 }) => {
   return (
-    <HStack spacing={8} p={4} bg="gray.50" rounded="md" width="full" justifyContent="center">
+    <HStack
+      spacing={8}
+      p={4}
+      bg="gray.50"
+      rounded="md"
+      width="full"
+      justifyContent="center"
+    >
       <VStack>
         <Text fontSize="2xl" fontWeight="bold" color="blue.500">
           {wordsPerMinute}

@@ -1,14 +1,13 @@
-import type { ScoreEntry } from "../../../shared/store/types"
+import type { ScoreEntry } from "../../../shared/store/types";
 
 export type LeaderboardStoreState = {
-    isLoading: boolean,
-    error: string | null,
-    leaderboard: ScoreEntry[]
-}
-
+  isLoading: boolean;
+  error: string | null;
+  leaderboard: ScoreEntry[];
+};
 
 export type LeaderboardStoreActions = {
-    fetchLeaderboard: () => Promise<void>,
-}
+  fetchLeaderboard: () => Promise<void>;
+};
 
-export type LeaderboardStore = LeaderboardStoreState & LeaderboardStoreActions
+export type LeaderboardStore = LeaderboardStoreState & LeaderboardStoreActions;

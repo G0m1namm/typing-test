@@ -2,12 +2,12 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
-import { server } from './testing/server';
+import "@testing-library/jest-dom";
+import { server } from "./testing/server";
 
 // Start the server before all tests
 beforeAll(() => {
-    server.listen();
+  server.listen();
 });
 
 // Reset any request handlers that are declared as a part of our tests

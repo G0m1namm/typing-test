@@ -8,6 +8,28 @@ interface TypingConsoleProps {
   onStart: () => void;
 }
 
+/**
+ * TypingConsole Component
+ *
+ * Displays the typing test interface including:
+ * - Words to be typed in a scrollable container
+ * - Current word being typed with real-time feedback
+ * - Input field for user typing
+ *
+ * @param props - Component props
+ * @param props.words - Array of words to be typed
+ * @param props.enteredText - Current text entered by user
+ * @param props.onStart - Callback for when typing starts
+ *
+ * @example
+ * ```tsx
+ * <TypingConsole
+ *   words={['hello', 'world']}
+ *   enteredText="hel"
+ *   onStart={() => console.log('Started typing')}
+ * />
+ * ```
+ */
 export const TypingConsole: React.FC<TypingConsoleProps> = ({
   enteredText,
   words,
@@ -35,7 +57,7 @@ export const TypingConsole: React.FC<TypingConsoleProps> = ({
               />
             ) : (
               `${word} `
-            )
+            ),
           )}
         </Heading>
       </Box>

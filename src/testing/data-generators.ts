@@ -1,4 +1,4 @@
-import type { ScoreEntry } from '../shared/store/types';
+import type { ScoreEntry } from "../shared/store/types";
 
 /**
  * createMockScoreEntry
@@ -13,7 +13,7 @@ export const createMockScoreEntry = (): ScoreEntry => ({
   score: 100,
   accuracy: 0.5,
   firstStrikeAccuracy: 0.5,
-  username: 'jhon_doe',
+  username: "jhon_doe",
   words: 10,
   wpm: 10,
 });
@@ -29,5 +29,8 @@ export const createMockScoreEntry = (): ScoreEntry => ({
  * @returns {ScoreEntry[]} An array of mock score entries.
  */
 export const createMockScoreEntries = (count: number): ScoreEntry[] => {
-  return Array.from({ length: count }, (_, index) => ({ ...createMockScoreEntry(), id: index + 1 }));
+  return Array.from({ length: count }, (_, index) => ({
+    ...createMockScoreEntry(),
+    id: index + 1,
+  }));
 };

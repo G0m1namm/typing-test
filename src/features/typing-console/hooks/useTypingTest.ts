@@ -13,16 +13,22 @@ export const useTypingTest = () => {
   const moveNextWord = useTextStore.use.moveNextWord();
   const currentWordIndex = useTextStore.use.currentWordIndex();
 
-  const handleInputChange = useCallback((text: string, onStart?: () => void) => {
-    setEnteredText(text, onStart);
-  }, [setEnteredText]);
+  const handleInputChange = useCallback(
+    (text: string, onStart?: () => void) => {
+      setEnteredText(text, onStart);
+    },
+    [setEnteredText],
+  );
 
-  const handleWordComplete = useCallback((word: string) => {
-    if (enteredText.trim() === word) {
-      moveNextWord();
-      setEnteredText('');
-    }
-  }, [enteredText, moveNextWord, setEnteredText]);
+  const handleWordComplete = useCallback(
+    (word: string) => {
+      if (enteredText.trim() === word) {
+        moveNextWord();
+        setEnteredText("");
+      }
+    },
+    [enteredText, moveNextWord, setEnteredText],
+  );
 
   return {
     enteredText,
@@ -30,6 +36,6 @@ export const useTypingTest = () => {
     currentWordIndex,
     words: getRemainingWords(),
     handleInputChange,
-    handleWordComplete
+    handleWordComplete,
   };
 };

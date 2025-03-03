@@ -24,7 +24,7 @@ interface TypingControlsProps {
 
 /**
  * TypingControls Component
- * 
+ *
  * Manages the control panel for the typing test, including:
  * - Username input for score saving
  * - Save score button

@@ -3,13 +3,13 @@
 }
 
 .current-word {
-  --correct-word-color: #93C43F;
-  --wrong-word-color: #F25151;
-  --underline-word-color: #10ADE2;
+  --correct-word-color: #93c43f;
+  --wrong-word-color: #f25151;
+  --underline-word-color: #10ade2;
 
   .typed {
     text-decoration: none !important;
-    
+
     &.correct {
       color: var(--correct-word-color, green);
     }
@@ -24,4 +24,3 @@
     }
   }
 }
-

@@ -34,18 +34,10 @@ export const Leaderboard: React.FC = () => {
   const error = useLeaderboardStore.use.error();
   const fetchLeaderboard = useLeaderboardStore.use.fetchLeaderboard();
 
-  /**
-   * Effect to fetch leaderboard data when component mounts
-   * Dependency on fetchLeaderboard ensures we re-fetch if the function changes
-   */
   useEffect(() => {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
 
-  /**
-   * Loading state render
-   * Shows a centered spinner while data is being fetched
-   */
   if (isLoading)
     return (
       <Center w="full" py="10">
@@ -53,10 +45,6 @@ export const Leaderboard: React.FC = () => {
       </Center>
     );
 
-  /**
-   * Error state render
-   * Displays an alert with the error message if fetch fails
-   */
   if (error)
     return (
       <Center w="full" py="10">

@@ -6,51 +6,61 @@ import { useCallback, useEffect, useState } from "react";
 import { useTimer } from "react-timer-hook";
 import { TypingTestView } from "../components/TypingTestView";
 
-// Set initial timer duration to 2 minutes from now
+/**
+ * Calculate initial time for the typing test timer
+ * @returns {Date} Date object set to 30 seconds from now
+ */
 const getInitialTime = () => {
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 30);
+  time.setSeconds(time.getSeconds() + 120); // 2min === 120sec
   return time;
 };
 
+/**
+ * TypingTestContainer
+ *
+ * Container component that handles all the business logic for the typing test:
+ * - State management through multiple stores
+ * - Timer control and test completion logic
+ * - Score calculation and submission
+ * - Toast notifications for user feedback
+ * - Test restart functionality
+ *
+ * Pattern: Container/Presenter pattern where this container handles logic
+ * while TypingTestView handles the presentation
+ */
 export const TypingTestContainer: React.FC = () => {
-  // Get typing test store values
-const enteredText = useTypingStore.use.enteredText();
-const status = useTypingStore.use.status();
-const accuracy = useTypingStore.use.accuracy();
-const score = useTypingStore.use.score();
-const wordsPerMinute = useTypingStore.use.wpm();
-const endTest = useTypingStore.use.endTest();
-const resetTest = useTypingStore.use.resetTest();
+  // Store hooks setup
+  const enteredText = useTypingStore.use.enteredText();
+  const status = useTypingStore.use.status();
+  const accuracy = useTypingStore.use.accuracy();
+  const score = useTypingStore.use.score();
+  const wordsPerMinute = useTypingStore.use.wpm();
+  const endTest = useTypingStore.use.endTest();
+  const resetTest = useTypingStore.use.resetTest();
 
-// Get text store values
-const getRemainingWords = useTextStore.use.getRemainingWords();
-const currentWordIndex = useTextStore.use.currentWordIndex();
-const initialText = useTextStore.use.initialText();
-const resetTextStore = useTextStore.use.resetStore();
+  // Get text store values
+  const getRemainingWords = useTextStore.use.getRemainingWords();
+  const currentWordIndex = useTextStore.use.currentWordIndex();
+  const initialText = useTextStore.use.initialText();
+  const resetTextStore = useTextStore.use.resetStore();
 
-// Get score data store values
-const saveScore = useScoreDataStore.use.savesScore();
-const resetScoreStore = useScoreDataStore.use.resetStore();
-const saveScoreSuccess = useScoreDataStore.use.success();
-const saveScoreError = useScoreDataStore.use.error();
-const isSaveScoreLoading = useScoreDataStore.use.isLoading();
+  // Get score data store values
+  const saveScore = useScoreDataStore.use.savesScore();
+  const resetScoreStore = useScoreDataStore.use.resetStore();
+  const saveScoreSuccess = useScoreDataStore.use.success();
+  const saveScoreError = useScoreDataStore.use.error();
+  const isSaveScoreLoading = useScoreDataStore.use.isLoading();
 
   const toast = useToast();
   const [username, setUsername] = useState("");
   const [isTestComplete, setIsTestComplete] = useState(false);
 
   // Timer configuration
-  const {
-    seconds,
-    minutes,
-    start,
-    restart,
-    pause
-  } = useTimer({
+  const { seconds, minutes, start, restart, pause } = useTimer({
     expiryTimestamp: getInitialTime(),
-    onExpire: () => handleTestComplete('TIME_UP'),
-    autoStart: false
+    onExpire: () => handleTestComplete("TIME_UP"),
+    autoStart: false,
   });
 
   const words = getRemainingWords();
@@ -61,25 +71,32 @@ const isSaveScoreLoading = useScoreDataStore.use.isLoading();
    * - All words completed
    * - Manual end
    */
-  const handleTestComplete = useCallback((reason: 'TIME_UP' | 'WORDS_COMPLETE' | 'MANUAL') => {
-    if (isTestComplete) return; // Prevent multiple completions
+  const handleTestComplete = useCallback(
+    (reason: "TIME_UP" | "WORDS_COMPLETE" | "MANUAL") => {
+      if (isTestComplete) return; // Prevent multiple completions
 
-    setIsTestComplete(true);
-    pause(); // Stop the timer
-    endTest(initialText);
+      setIsTestComplete(true);
+      pause(); // Stop the timer
+      endTest(initialText);
 
-    // Log completion reason if needed
-    console.log(`Test completed: ${reason}`);
-  }, [isTestComplete, pause, endTest, initialText]);
+      // Log completion reason if needed
+      console.log(`Test completed: ${reason}`);
+    },
+    [isTestComplete, pause, endTest, initialText],
+  );
 
-  // Check for words completion
+  /**
+   * Monitors words completion to end test when all words are typed
+   */
   useEffect(() => {
-    if (words.length === 0 && status !== 'FINISHED') {
-      handleTestComplete('WORDS_COMPLETE');
+    if (words.length === 0 && status !== "FINISHED") {
+      handleTestComplete("WORDS_COMPLETE");
     }
   }, [words.length, status, handleTestComplete]);
 
-  // Show success toast when score is saved
+  /**
+   * Shows success toast when score is saved successfully
+   */
   useEffect(() => {
     if (saveScoreSuccess) {
       toast({
@@ -92,20 +109,35 @@ const isSaveScoreLoading = useScoreDataStore.use.isLoading();
     }
   }, [saveScoreSuccess, toast]);
 
-  const handleSaveScore = useCallback(async (username: string) => {
-    const scoreEntry = {
-      id: Date.now(),
-      accuracy,
-      score,
-      username: username || `Anonym${Date.now()}`,
-      firstStrikeAccuracy: accuracy,
-      wpm: wordsPerMinute,
-      words: currentWordIndex,
-    };
-    
-    await saveScore(scoreEntry);
-  }, [accuracy, score, wordsPerMinute, currentWordIndex, saveScore]);
+  /**
+   * Saves the current test score with user information
+   * Generates anonymous username if none provided
+   *
+   * @param username - User-provided username for the score entry
+   */
+  const handleSaveScore = useCallback(
+    async (username: string) => {
+      const scoreEntry = {
+        id: Date.now(),
+        accuracy,
+        score,
+        username: username || `Anonym${Date.now()}`,
+        firstStrikeAccuracy: accuracy,
+        wpm: wordsPerMinute,
+        words: currentWordIndex,
+      };
 
+      await saveScore(scoreEntry);
+    },
+    [accuracy, score, wordsPerMinute, currentWordIndex, saveScore],
+  );
+
+  /**
+   * Resets the test to initial state:
+   * - Resets timer
+   * - Clears typing progress
+   * - Resets all stores
+   */
   const handleRestart = useCallback(() => {
     const newTime = getInitialTime();
     restart(newTime, false);
@@ -115,6 +147,9 @@ const isSaveScoreLoading = useScoreDataStore.use.isLoading();
     setIsTestComplete(false);
   }, [restart, resetTest, resetTextStore, resetScoreStore]);
 
+  /**
+   * Starts the typing test timer
+   */
   const handleStart = useCallback(() => {
     start();
   }, [start]);

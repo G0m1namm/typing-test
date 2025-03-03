@@ -1,17 +1,17 @@
-import { act } from 'react';
-import { useLeaderboardStore } from '../store/leaderboardStore';
-import { createMockScoreEntries } from '../../../testing/data-generators';
-import { renderHook, waitFor } from '../../../testing/test-utils';
+import { act } from "react";
+import { useLeaderboardStore } from "../store/leaderboardStore";
+import { createMockScoreEntries } from "../../../testing/data-generators";
+import { renderHook, waitFor } from "../../../testing/test-utils";
 
-const mockError = 'Failed to fetch the leaderboard';
+const mockError = "Failed to fetch the leaderboard";
 
-describe('LeaderboardStore', () => {
+describe("LeaderboardStore", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('Initial State', () => {
-    it('should initialize with correct defaults', () => {
+  describe("Initial State", () => {
+    it("should initialize with correct defaults", () => {
       const { result } = renderHook(() => useLeaderboardStore.getState());
       const state = result.current;
       expect(state).toMatchObject({
@@ -22,18 +22,21 @@ describe('LeaderboardStore', () => {
     });
   });
 
-  describe('fetchLeaderboard', () => {
-    it('should handle successful data fetching', async () => {
+  describe("fetchLeaderboard", () => {
+    it("should handle successful data fetching", async () => {
       const { result } = renderHook(() => useLeaderboardStore.getState());
       const store = result.current;
 
-      jest.spyOn(store, 'fetchLeaderboard').mockImplementation(async () => {
+      jest.spyOn(store, "fetchLeaderboard").mockImplementation(async () => {
         act(() => {
           useLeaderboardStore.setState({ isLoading: true });
         });
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
         act(() => {
-          useLeaderboardStore.setState({ isLoading: false, leaderboard: createMockScoreEntries(1) });
+          useLeaderboardStore.setState({
+            isLoading: false,
+            leaderboard: createMockScoreEntries(1),
+          });
         });
       });
 
@@ -42,7 +45,9 @@ describe('LeaderboardStore', () => {
       });
 
       await waitFor(() => {
-        const { result: updatedStore } = renderHook(() => useLeaderboardStore.getState());
+        const { result: updatedStore } = renderHook(() =>
+          useLeaderboardStore.getState(),
+        );
         const currentState = updatedStore.current;
         expect(currentState).toMatchObject({
           isLoading: false,
@@ -52,15 +57,15 @@ describe('LeaderboardStore', () => {
       });
     });
 
-    it('should handle loading state during fetch', async () => {
+    it("should handle loading state during fetch", async () => {
       const { result } = renderHook(() => useLeaderboardStore.getState());
       const store = result.current;
 
-      jest.spyOn(store, 'fetchLeaderboard').mockImplementation(async () => {
+      jest.spyOn(store, "fetchLeaderboard").mockImplementation(async () => {
         act(() => {
           useLeaderboardStore.setState({ isLoading: true });
         });
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
         act(() => {
           useLeaderboardStore.setState({ isLoading: false });
         });
@@ -76,7 +81,7 @@ describe('LeaderboardStore', () => {
       });
     });
 
-    it('should handle fetch errors', async () => {
+    it("should handle fetch errors", async () => {
       const { result } = renderHook(() => useLeaderboardStore.getState());
       const store = result.current;
 
@@ -87,7 +92,10 @@ describe('LeaderboardStore', () => {
         });
         await Promise.reject(new Error(mockError)).catch(() => {
           act(() => {
-            useLeaderboardStore.setState({ isLoading: false, error: mockError });
+            useLeaderboardStore.setState({
+              isLoading: false,
+              error: mockError,
+            });
           });
         });
       };
@@ -96,7 +104,9 @@ describe('LeaderboardStore', () => {
         await store.fetchLeaderboard();
       });
 
-      const { result: updatedStore } = renderHook(() => useLeaderboardStore.getState());
+      const { result: updatedStore } = renderHook(() =>
+        useLeaderboardStore.getState(),
+      );
       const currentState = updatedStore.current;
       expect(currentState).toMatchObject({
         isLoading: false,

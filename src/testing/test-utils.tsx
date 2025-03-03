@@ -1,5 +1,5 @@
-import { render as rtlRender } from '@testing-library/react';
-import { PropsWithChildren, ReactElement } from 'react';
+import { render as rtlRender } from "@testing-library/react";
+import { PropsWithChildren, ReactElement } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 
 function render(ui: ReactElement, renderOptions = {}) {
