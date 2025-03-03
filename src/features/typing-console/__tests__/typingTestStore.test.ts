@@ -63,7 +63,7 @@ describe('TypingStore', () => {
 
     const { result: updatedStore } = renderHook(() => useTypingStore.getState());
     expect(updatedStore.current.startTime).not.toBeNull();
-    expect(updatedStore.current.status).toBe("ACTIVE");
+    expect(updatedStore.current.status).toBe("RUNNING");
   });
 
   it('should set type logs', () => {
@@ -103,7 +103,7 @@ describe('TypingStore', () => {
       result.current.setEnteredText('test');
       result.current.setTypeLogs({ character: 'a', action: 'typing', word: 'test' });
       result.current.endTest('test');
-      result.current.resetTest();
+      result.current.resetTest('test');
     });
 
     const { result: updatedStore } = renderHook(() => useTypingStore.getState());
