@@ -1,7 +1,7 @@
 import { act } from 'react';
-import { renderHook, waitFor } from '@testing-library/react';
 import { useLeaderboardStore } from '../store/leaderboardStore';
 import { createMockScoreEntries } from '../../../testing/data-generators';
+import { renderHook, waitFor } from '../../../testing/test-utils';
 
 const mockError = 'Failed to fetch the leaderboard';
 

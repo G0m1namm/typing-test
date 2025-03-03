@@ -1,7 +1,7 @@
 import { act } from 'react';
 import { LogData, TypingStoreState } from '../store/types';
 import { useTypingStore } from '../store/typingTestStore';
-import { renderHook } from '@testing-library/react';
+import { renderHook } from '../../../testing/test-utils';
 
 describe('TypingStore', () => {
   const initialState: TypingStoreState = {

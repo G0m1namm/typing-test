@@ -1,5 +1,5 @@
 import { act } from 'react';
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor } from '../../testing/test-utils';
 import { useScoreDataStore } from '../store/scoreDataStore';
 import { createMockScoreEntry } from '../../testing/data-generators';
 

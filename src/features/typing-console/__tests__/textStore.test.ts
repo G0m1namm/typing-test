@@ -1,7 +1,6 @@
-import { renderHook } from "@testing-library/react";
 import { act } from "react";
 import { useTextStore } from "../store/textStore";
-
+import { renderHook } from '../../../testing/test-utils'
 describe('TextStore', () => {
   beforeEach(() => {
     const { result } = renderHook(() => useTextStore);

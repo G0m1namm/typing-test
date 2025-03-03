@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "../testing/test-utils";
 import App from "../App";
 
 describe("App tests", () => {
